@@ -31,7 +31,7 @@ namespace attendance_system_backend.Models
         {
             Date = DateTime.UtcNow; // Initialize date to the current date and time in UTC
             Status = AttendanceStatus.Absent; // Set default status to Absent
-            Employee = employee ?? throw new ArgumentNullException(nameof(employee), "Employee cannot be null.");
+            //Employee = employee ?? throw new ArgumentNullException(nameof(employee), "Employee cannot be null.");
         }
 
         public double? GetTotalHoursWorked()
