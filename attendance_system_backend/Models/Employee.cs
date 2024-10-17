@@ -17,6 +17,9 @@ namespace attendance_system_backend.Models
         [StringLength(50, ErrorMessage = "Last name can't be longer than 50 characters.")]
         public string LastName { get; set; }
 
+        [Required(ErrorMessage = "Address is required.")]
+        public Address Address { get; set; }
+        
         [Required(ErrorMessage = "Email address is required.")]
         [EmailAddress(ErrorMessage = "Invalid email address.")]
         public string Email { get; set; }
