@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using attendance_system_backend.Models.Enums;
 
 namespace attendance_system_backend.Models
 {
@@ -40,6 +41,9 @@ namespace attendance_system_backend.Models
         [Range(0, double.MaxValue, ErrorMessage = "Salary must be a non-negative value.")]
         public decimal Salary { get; set; }
 
+        [Required(ErrorMessage = "Gender is required.")]
+        public Gender Gender { get; set; }
+        
         [Required(ErrorMessage = "Department ID is required.")]
         public int DepartmentId { get; set; }
 
