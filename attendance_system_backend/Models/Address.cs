@@ -1,9 +1,14 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace attendance_system_backend.Models
 {
     public class Address
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+        
         [Required(ErrorMessage = "Street address is required.")]
         [StringLength(100, ErrorMessage = "Street address can't be longer than 100 characters.")]
         public string Street { get; set; }
