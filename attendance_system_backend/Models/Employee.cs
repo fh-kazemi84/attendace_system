@@ -46,9 +46,13 @@ namespace attendance_system_backend.Models
         [ForeignKey("DepartmentId")]
         public Department Department { get; set; }
 
-         public ICollection<AttendanceRecord> AttendanceRecords { get; set; }
+        public int UserId { get; set; }
 
-         public Employee()
+        [ForeignKey("UserId")]
+        public User User { get; set; }
+        public ICollection<AttendanceRecord> AttendanceRecords { get; set; }
+
+        public Employee()
         {
             AttendanceRecords = new List<AttendanceRecord>(); 
             Address = new Address(); 
