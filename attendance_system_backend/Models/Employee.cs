@@ -47,6 +47,11 @@ namespace attendance_system_backend.Models
         public Department Department { get; set; }
 
          public ICollection<AttendanceRecord> AttendanceRecords { get; set; }
-         
+
+         public Employee()
+        {
+            AttendanceRecords = new List<AttendanceRecord>(); 
+            Address = new Address(); 
+        }
     }
 }
