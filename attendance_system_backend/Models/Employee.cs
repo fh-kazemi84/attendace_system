@@ -45,5 +45,8 @@ namespace attendance_system_backend.Models
 
         [ForeignKey("DepartmentId")]
         public Department Department { get; set; }
+
+         public ICollection<AttendanceRecord> AttendanceRecords { get; set; }
+         
     }
 }
