@@ -33,5 +33,14 @@ namespace attendance_system_backend.Models
             Status = AttendanceStatus.Absent; // Set default status to Absent
             Employee = employee ?? throw new ArgumentNullException(nameof(employee), "Employee cannot be null.");
         }
+
+        public double? GetTotalHoursWorked()
+        {
+            if (CheckInTime.HasValue && CheckOutTime.HasValue)
+            {
+                return (CheckOutTime.Value - CheckInTime.Value).TotalHours;
+            }
+            return null;
+        }
     }
 }
