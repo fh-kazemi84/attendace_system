@@ -1,6 +1,7 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using attendance_system_backend.Models.Enums;
 
 namespace attendance_system_backend.Models
 {
@@ -17,6 +18,9 @@ namespace attendance_system_backend.Models
 
         public DateTime? CheckOutTime { get; set; }
 
+        [Required(ErrorMessage = "Attendance status is required.")]
+        public AttendanceStatus Status { get; set; }
+
         [Required]
         public int EmployeeId { get; set; }
 
@@ -26,6 +30,7 @@ namespace attendance_system_backend.Models
         public AttendanceRecord(Employee employee)
         {
             Date = DateTime.UtcNow; // Initialize date to the current date and time in UTC
+            Status = AttendanceStatus.Absent; // Set default status to Absent
             Employee = employee ?? throw new ArgumentNullException(nameof(employee), "Employee cannot be null.");
         }
     }
