@@ -19,7 +19,7 @@ namespace attendance_system_backend.Models
 
         [Required(ErrorMessage = "Address is required.")]
         public Address Address { get; set; }
-        
+
         [Required(ErrorMessage = "Email address is required.")]
         [EmailAddress(ErrorMessage = "Invalid email address.")]
         public string Email { get; set; }
@@ -39,5 +39,11 @@ namespace attendance_system_backend.Models
 
         [Range(0, double.MaxValue, ErrorMessage = "Salary must be a non-negative value.")]
         public decimal Salary { get; set; }
+
+        [Required(ErrorMessage = "Department ID is required.")]
+        public int DepartmentId { get; set; }
+
+        [ForeignKey("DepartmentId")]
+        public Department Department { get; set; }
     }
 }
