@@ -27,6 +27,7 @@ namespace attendance_system_backend.Models
         [ForeignKey("EmployeeId")]
         public Employee Employee { get; set; }
 
+        public AttendanceRecord(){ }
         public AttendanceRecord(Employee employee)
         {
             Date = DateTime.UtcNow; // Initialize date to the current date and time in UTC
