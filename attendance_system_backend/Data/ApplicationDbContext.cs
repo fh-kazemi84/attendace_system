@@ -1,6 +1,5 @@
 
 using attendance_system_backend.Models;
-using attendance_system_backend.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace attendance_system_backend.Data
