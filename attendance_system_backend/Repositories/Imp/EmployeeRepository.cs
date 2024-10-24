@@ -184,5 +184,103 @@ namespace attendance_system_backend.Repositories.Imp
                 throw new Exception($"Could not delete employee with ID {id}: {ex.Message}");
             }
         }
+
+        //Get attendance-records by employeeId
+        public async Task<IEnumerable<AttendanceRecord>> GetAttendanceRecordsByEmployeeIdAsync(int employeeId)
+        {
+            try
+            {
+                var employee = await _context.Employees
+                    .Include(e => e.AttendanceRecords)
+                    .FirstOrDefaultAsync(e => e.Id == employeeId);
+                return employee?.AttendanceRecords ?? new List<AttendanceRecord>();
+            }
+            catch(Exception ex)
+            {
+                throw new Exception($"Could not fetch attendance-records: {ex.Message}");
+            }
+        }
+
+        //Add attendance-recod to data source
+        public async Task<AttendanceRecord> AddAttendanceRecodAsync(int employeeId, AttendanceRecord attendanceRecord)
+        {
+            try
+            {
+                var employee = await GetEmployeeByIdAsync(employeeId);
+                if(employee != null)
+                {
+                    employee.AttendanceRecords.Add(attendanceRecord);
+                    await _context.SaveChangesAsync();
+                    return attendanceRecord;
+                }
+                else
+                {
+                    throw new Exception($"Could not find employee with ID: {employeeId}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Could not add new attendance-record in this employee: {ex.Message}");
+            }        
+        }
+
+        //Update existing attendance-record
+        public async Task<AttendanceRecord> UpdateAttendanceRecodAsync(int employeeId, AttendanceRecord attendanceRecord)
+        {
+            try
+            {
+                var employee = await GetEmployeeByIdAsync(employeeId);
+                if (employee == null)
+                {
+                    throw new Exception($"Could not find employee with id: {employeeId}");
+                }
+
+                var existingAttendanceRecord = employee.AttendanceRecords
+                    .FirstOrDefault(ar => ar.Id == attendanceRecord.Id);
+                if (existingAttendanceRecord == null)
+                {
+                    throw new Exception($"Could not find attendance-record with id: {attendanceRecord.Id}");
+                }
+
+                existingAttendanceRecord.Date = attendanceRecord.Date;
+                existingAttendanceRecord.CheckInTime = attendanceRecord.CheckInTime;
+                existingAttendanceRecord.CheckOutTime = attendanceRecord.CheckOutTime;
+                existingAttendanceRecord.Status = attendanceRecord.Status;
+
+                await _context.SaveChangesAsync();
+                return existingAttendanceRecord;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Could not update employee {ex.Message}");
+            }
+        }
+
+        //Delete an attendance-recrod by attendanceRecordId and employeeId
+        public async Task<bool> DeleteAttendanceRecodAsync(int attendanceRecordId, int employeeId)
+        {
+            try
+            {
+                var employee = await GetEmployeeByIdAsync(employeeId);
+                if (employee == null)
+                {
+                    throw new Exception($"Could not find employee with ID: {employeeId}");
+                }
+                var attendanceRecord = employee.AttendanceRecords
+                    .FirstOrDefault(ar => ar.Id == attendanceRecordId);
+                if (attendanceRecord == null)
+                {
+                    throw new Exception($"Could not find attendance-record with id: {attendanceRecordId}");
+                }
+
+                _context.AttendanceRecords.Remove(attendanceRecord);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Could not delete attendance-record with ID {attendanceRecordId}: {ex.Message}");
+            }
+        }
     }
 }
