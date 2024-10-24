@@ -11,5 +11,10 @@ namespace attendance_system_backend.Services
         Task<EmployeeDTO> UpdateEmployeeAsync(EmployeeDTO employeeDto);
         Task<bool> DeleteEmployeeAsync(int id);
 
+        Task<IEnumerable<AttendanceRecordDTO>> GetAttendanceRecordsByEmployeeIdAsync(int employeeId);
+        Task<AttendanceRecordDTO> AddAttendanceRecodAsync(int employeeId, AttendanceRecordDTO attendanceRecordDto);
+        Task<AttendanceRecordDTO> UpdateAttendanceRecodAsync(int employeeId, AttendanceRecordDTO attendanceRecordDto);
+        Task<bool> DeleteAttendanceRecodAsync(int attendanceRecordId, int employeeId);
+
     }
 }
