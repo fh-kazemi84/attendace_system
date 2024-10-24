@@ -21,18 +21,10 @@ namespace attendance_system_backend.Models
         [Required(ErrorMessage = "Attendance status is required.")]
         public AttendanceStatus Status { get; set; }
 
-        [Required]
-        public int EmployeeId { get; set; }
-
-        [ForeignKey("EmployeeId")]
-        public Employee Employee { get; set; }
-
-        public AttendanceRecord(){ }
-        public AttendanceRecord(Employee employee)
+        public AttendanceRecord()
         {
             Date = DateTime.UtcNow; // Initialize date to the current date and time in UTC
-            Status = AttendanceStatus.Absent; // Set default status to Absent
-            //Employee = employee ?? throw new ArgumentNullException(nameof(employee), "Employee cannot be null.");
+            Status = AttendanceStatus.Absent; // Set default status to Absent            
         }
 
         public double? GetTotalHoursWorked()
