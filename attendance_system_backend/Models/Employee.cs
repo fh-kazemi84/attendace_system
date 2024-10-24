@@ -1,3 +1,4 @@
+
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using attendance_system_backend.Models.Enums;
@@ -17,9 +18,6 @@ namespace attendance_system_backend.Models
         [Required(ErrorMessage = "Last name is required.")]
         [StringLength(50, ErrorMessage = "Last name can't be longer than 50 characters.")]
         public string LastName { get; set; }
-
-        [Required(ErrorMessage = "Address is required.")]
-        public Address Address { get; set; }
 
         [Required(ErrorMessage = "Email address is required.")]
         [EmailAddress(ErrorMessage = "Invalid email address.")]
@@ -44,22 +42,28 @@ namespace attendance_system_backend.Models
         [Required(ErrorMessage = "Gender is required.")]
         public Gender Gender { get; set; }
         
+        [Required(ErrorMessage = "Address ID is required.")]
+        public int AddressId { get; set; }
+
+        [ForeignKey("AddressId")]
+        public Address Address { get; set; }
+        
         [Required(ErrorMessage = "Department ID is required.")]
         public int DepartmentId { get; set; }
 
         [ForeignKey("DepartmentId")]
         public Department Department { get; set; }
 
-        public int UserId { get; set; }
+        [Required(ErrorMessage = "UserInfo ID is required.")]
+        public int UserInfoId { get; set; }
 
-        [ForeignKey("UserId")]
-        public User User { get; set; }
+        [ForeignKey("UserInfoId")]
+        public UserInfo UserInfo { get; set; }
         public ICollection<AttendanceRecord> AttendanceRecords { get; set; }
 
         public Employee()
         {
             AttendanceRecords = new List<AttendanceRecord>(); 
-            Address = new Address(); 
         }
     }
 }
