@@ -4,10 +4,10 @@ namespace attendance_system_backend.Repositories
 {
     public interface IEmployeeRepository
     {
-        Task<IEnumerable<Employee>> GetAllEmployeeAsync();
+        Task<IEnumerable<Employee>> GetAllEmployeesAsync();
         Task<Employee> GetEmployeeByIdAsync(int id);
-        Task AddEmployeeAsync(Employee employee);
-        Task UpdateEmployeeAsync(Employee employee);
-        Task DeleteEmployeeAsync(int id);
+        Task<Employee> AddEmployeeAsync(Employee employee);
+        Task<Employee> UpdateEmployeeAsync(Employee employee);
+        Task<bool> DeleteEmployeeAsync(int id);
     }
 }
