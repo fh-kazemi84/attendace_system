@@ -87,5 +87,63 @@ namespace attendance_system_backend.Services.Imp
                 throw new Exception($"Error deleting employee: {ex.Message}");
             }
         }
+
+        //Get attendance-records by employeeId
+        public async Task<IEnumerable<AttendanceRecordDTO>> GetAttendanceRecordsByEmployeeIdAsync(int employeeId)
+        {
+            try
+            {
+                var attendanceRecords = await _employeeRepository.GetAttendanceRecordsByEmployeeIdAsync(employeeId);
+                return _mapper.Map<IEnumerable<AttendanceRecordDTO>>(attendanceRecords);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retreiving attendance-records: {ex.Message}");
+            }
+        }
+
+        //Add attendance-recod to data source
+        public async Task<AttendanceRecordDTO> AddAttendanceRecodAsync(int employeeId, AttendanceRecordDTO attendanceRecordDto)
+        {
+            try
+            {
+                var attendanceRecord = _mapper.Map<AttendanceRecord>(attendanceRecordDto);
+                var addedAttendanceRecord = await _employeeRepository.AddAttendanceRecodAsync(employeeId, attendanceRecord);
+                return _mapper.Map<AttendanceRecordDTO>(addedAttendanceRecord);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error adding new employee: {ex.Message}");
+            }
+        }
+
+        //Update existing attendance-record
+        public async Task<AttendanceRecordDTO> UpdateAttendanceRecodAsync(int employeeId, AttendanceRecordDTO attendanceRecordDto)
+        {
+
+            try
+            {
+                var attendanceRecord = _mapper.Map<AttendanceRecord>(attendanceRecordDto);
+                var attendanceRecordUpdated = await _employeeRepository.UpdateAttendanceRecodAsync(employeeId, attendanceRecord);
+                return _mapper.Map<AttendanceRecordDTO>(attendanceRecordUpdated);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception($"Error updating attendance-record: {ex.Message}");
+            }
+        }
+
+        //Delete an attendance-record by attendanceRecordId and employeeId
+        public async Task<bool> DeleteAttendanceRecodAsync(int attendanceRecordId, int employeeId)
+        {
+            try
+            {
+                return await _employeeRepository.DeleteAttendanceRecodAsync(attendanceRecordId, employeeId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error deleting attendance-record: {ex.Message}");
+            }
+        }
     }
 }
