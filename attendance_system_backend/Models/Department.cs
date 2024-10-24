@@ -15,12 +15,5 @@ namespace attendance_system_backend.Models
 
         [StringLength(250, ErrorMessage = "Description can't be longer than 250 characters.")]
         public string Description { get; set; }
-
-        public ICollection<Employee> Employees { get; set; }
-
-        public Department()
-        {
-            Employees = new List<Employee>(); // Initialize collection to avoid null references
-        }
     }
 }
