@@ -9,5 +9,10 @@ namespace attendance_system_backend.Repositories
         Task<Employee> AddEmployeeAsync(Employee employee);
         Task<Employee> UpdateEmployeeAsync(Employee employee);
         Task<bool> DeleteEmployeeAsync(int id);
+
+        Task<IEnumerable<AttendanceRecord>> GetAttendanceRecordsByEmployeeIdAsync(int employeeId);
+        Task<AttendanceRecord> AddAttendanceRecodAsync(int employeeId, AttendanceRecord attendanceRecord);
+        Task<AttendanceRecord> UpdateAttendanceRecodAsync(int employeeId, AttendanceRecord attendanceRecord);
+        Task<bool> DeleteAttendanceRecodAsync(int attendanceRecordId, int employeeId);
     }
 }
