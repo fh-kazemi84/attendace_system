@@ -111,5 +111,80 @@ namespace attendance_system_backend.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+        //GET: api/{employeeId}/attendance
+        [HttpGet("{employeeId}/attendance")]
+        public async Task<IActionResult> GetAttendanceRecords(int employeeId)
+        {
+            try
+            {
+                var attendanceRecords = await _employeeService.GetAttendanceRecordsByEmployeeIdAsync(employeeId);
+                return Ok(attendanceRecords);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        //POST: api/{employeeId}/attendance
+        [HttpPost("{employeeId}/attendance")]
+        public async Task<IActionResult> AddAttendanceRecod(int employeeId, [FromBody] AttendanceRecordDTO attendanceRecordDto)
+        {
+            try
+            {
+                if (attendanceRecordDto == null)
+                {
+                    return BadRequest("Attendance-Record object is null.");
+                }
+
+                var createdAttendanceRecord = await _employeeService.AddAttendanceRecodAsync(employeeId, attendanceRecordDto);
+                return CreatedAtAction(nameof(GetAttendanceRecords), new { id = createdAttendanceRecord.Id }, createdAttendanceRecord);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        //PUT: api/{employeeId}/attendance/{attendanceRecordId}
+        [HttpPut("{employeeId}/attendance/{attendanceRecordId}")]
+        public async Task<IActionResult> UpdateAttendanceRecord(int employeeId, int attendanceRecordId, [FromBody] AttendanceRecordDTO attendanceRecordDto)
+        {
+            try
+            {
+                if (attendanceRecordDto == null)
+                {
+                    return BadRequest("Attendance-Record data is null.");
+                }
+
+                attendanceRecordDto.Id = attendanceRecordId;
+                var updatedAttendanceRecord = await _employeeService.UpdateAttendanceRecodAsync(employeeId, attendanceRecordDto);
+                return Ok(updatedAttendanceRecord);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        //DELETE: api/{employeeId}/attendance/{attendanceRecordId}
+        [HttpDelete("{employeeId}/attendance/{attendanceRecordId}")]
+        public async Task<IActionResult> DeleteAttendanceRecord(int attendanceRecordId, int employeeId)
+        {
+            try
+            {
+                var deletedAttendanceRecord = await _employeeService.DeleteAttendanceRecodAsync(attendanceRecordId, employeeId);
+                if (!deletedAttendanceRecord)
+                {
+                    return NotFound();
+                }
+                return Ok("AttendanceRecord deleted successfully. ");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
 }
