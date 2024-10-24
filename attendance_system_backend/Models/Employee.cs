@@ -59,6 +59,7 @@ namespace attendance_system_backend.Models
 
         [ForeignKey("UserInfoId")]
         public UserInfo UserInfo { get; set; }
+        
         public ICollection<AttendanceRecord> AttendanceRecords { get; set; }
 
         public Employee()

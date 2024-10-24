@@ -19,6 +19,5 @@ namespace attendance_system_backend.Models
 
         [Required(ErrorMessage = "User role is required.")]
         public UserRole Role { get; set; }
-
     }
 }
