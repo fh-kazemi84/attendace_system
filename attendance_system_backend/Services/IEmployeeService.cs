@@ -1,5 +1,5 @@
-
-using attendance_system_backend.DTOs;
+﻿using attendance_system_backend.DTOs;
+using attendance_system_backend.Models;
 
 namespace attendance_system_backend.Services
 {
@@ -15,6 +15,5 @@ namespace attendance_system_backend.Services
         Task<AttendanceRecordDTO> AddAttendanceRecodAsync(int employeeId, AttendanceRecordDTO attendanceRecordDto);
         Task<AttendanceRecordDTO> UpdateAttendanceRecodAsync(int employeeId, AttendanceRecordDTO attendanceRecordDto);
         Task<bool> DeleteAttendanceRecodAsync(int attendanceRecordId, int employeeId);
-
     }
 }
