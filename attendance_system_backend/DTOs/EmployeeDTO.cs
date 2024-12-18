@@ -1,3 +1,4 @@
+﻿
 namespace attendance_system_backend.DTOs
 {
     public class EmployeeDTO
@@ -8,7 +9,7 @@ namespace attendance_system_backend.DTOs
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public DateTime HireDate { get; set; }
-        public string Position { get; set; }
+        public int Position { get; set; } // Assuming Position enum is an int
         public double Salary { get; set; }
         public int Gender { get; set; } // Assuming Gender enum is an int
         public AddressDTO AddressDTO { get; set; }
