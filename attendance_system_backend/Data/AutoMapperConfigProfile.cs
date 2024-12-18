@@ -1,21 +1,24 @@
-using attendance_system_backend.DTOs;
+﻿using attendance_system_backend.DTOs;
 using attendance_system_backend.Models;
 using attendance_system_backend.Models.Enums;
 using AutoMapper;
+
 namespace attendance_system_backend.Data
 {
-    public class AutoMapperConfigProfile :  Profile
+    public class AutoMapperConfigProfile : Profile
     {
         public AutoMapperConfigProfile()
         {
             //Mapping Employee
             CreateMap<Employee, EmployeeDTO>()
+                .ForMember(dest => dest.Position, opt => opt.MapFrom(src => (int)src.Position)) //Convert enum to int
                 .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => (int)src.Gender)) //Convert enum to int
                 .ForMember(dest => dest.AddressDTO, opt => opt.MapFrom(src => src.Address))
                 .ForMember(dest => dest.UserInfoDTO, opt => opt.MapFrom(src => src.UserInfo))
                 .ForMember(dest => dest.AttendanceRecordDTOs, opt => opt.MapFrom(src => src.AttendanceRecords));
                 
             CreateMap<EmployeeDTO, Employee>()
+                 .ForMember(dest => dest.Position, opt => opt.MapFrom(src => (Position)src.Position)) //Convert int to enum
                  .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => (Gender)src.Gender)) //Convert int to enum
                  .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.AddressDTO))
                  .ForMember(dest => dest.UserInfo, opt => opt.MapFrom(src => src.UserInfoDTO))
