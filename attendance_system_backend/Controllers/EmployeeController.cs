@@ -1,5 +1,4 @@
-
-using attendance_system_backend.DTOs;
+﻿using attendance_system_backend.DTOs;
 using attendance_system_backend.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,7 +6,7 @@ namespace attendance_system_backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EmployeeController  : ControllerBase
+    public class EmployeeController : ControllerBase
     {
         private readonly IEmployeeService _employeeService;
 
@@ -16,12 +15,13 @@ namespace attendance_system_backend.Controllers
             _employeeService = employeeService;
         }
 
-        //GET: api/employees
-        [HttpGet]
+        //GET: api/Employee/employees
+        [HttpGet("employees")]
         public async Task<IActionResult> GetAllEmployees()
         {
             try
             {
+                Response.Headers.Add("Access-Control-Allow-Origin", "*");
                 var employees = await _employeeService.GetAllEmployeesAsync();
                 return Ok(employees);
             }
@@ -31,12 +31,13 @@ namespace attendance_system_backend.Controllers
             }
         }
 
-        //GET: api/employee/id
-        [HttpGet("{id}")]
+        //GET: api/Employee/employees/id
+        [HttpGet("employees/{id}")]
         public async Task<IActionResult> GetEmployeeById(int id)
         {
             try
             {
+                Response.Headers.Add("Access-Control-Allow-Origin", "*");
                 var employee = await _employeeService.GetEmployeeByIdAsync(id);
                 if(employee == null)
                 {
@@ -50,7 +51,7 @@ namespace attendance_system_backend.Controllers
             }
         }
 
-        //POST: api/employee
+        //POST: api/Employee/add
         [HttpPost]
         [Route("add")]
         public async Task<IActionResult> AddEmployee([FromBody] EmployeeDTO employeeDto)
@@ -62,6 +63,7 @@ namespace attendance_system_backend.Controllers
                     return BadRequest("Employee object is null.");
                 }
 
+                Response.Headers.Add("Access-Control-Allow-Origin", "*");
                 var createdEmployee = await _employeeService.AddEmployeeAsync(employeeDto);
                 return CreatedAtAction(nameof(GetEmployeeById), new { id = createdEmployee.Id}, createdEmployee);
             }
@@ -71,7 +73,7 @@ namespace attendance_system_backend.Controllers
             }
         }
 
-        //PUT: api/employee
+        //PUT: api/Employee/update?id=
         [HttpPut]
         [Route("update")]
         public async Task<IActionResult> UpdateEmployee(int id, [FromBody] EmployeeDTO employeeDto)
@@ -93,12 +95,13 @@ namespace attendance_system_backend.Controllers
             }
         }
 
-        //DELETE: api/employee/{id}
-        [HttpDelete("{id}")]
+        //DELETE: api/Employee/delete/{id}
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteEmployee(int id)
         {
             try
             {
+                Response.Headers.Add("Access-Control-Allow-Origin", "*");
                 var deletedEmployee = await _employeeService.DeleteEmployeeAsync(id);
                 if (!deletedEmployee)
                 {
@@ -112,8 +115,8 @@ namespace attendance_system_backend.Controllers
             }
         }
 
-        //GET: api/{employeeId}/attendance
-        [HttpGet("{employeeId}/attendance")]
+        //GET: api/Employee/{employeeId}/attendances
+        [HttpGet("{employeeId}/attendances")]
         public async Task<IActionResult> GetAttendanceRecords(int employeeId)
         {
             try
@@ -127,8 +130,8 @@ namespace attendance_system_backend.Controllers
             }
         }
 
-        //POST: api/{employeeId}/attendance
-        [HttpPost("{employeeId}/attendance")]
+        //POST: api/Employee/{employeeId}/add-attendance
+        [HttpPost("{employeeId}/add-attendance")]
         public async Task<IActionResult> AddAttendanceRecod(int employeeId, [FromBody] AttendanceRecordDTO attendanceRecordDto)
         {
             try
@@ -147,8 +150,8 @@ namespace attendance_system_backend.Controllers
             }
         }
 
-        //PUT: api/{employeeId}/attendance/{attendanceRecordId}
-        [HttpPut("{employeeId}/attendance/{attendanceRecordId}")]
+        //PUT: api/Employee/{employeeId}/update-attendance?attendanceRecordId=
+        [HttpPut("{employeeId}/update-attendance/{attendanceRecordId}")]
         public async Task<IActionResult> UpdateAttendanceRecord(int employeeId, int attendanceRecordId, [FromBody] AttendanceRecordDTO attendanceRecordDto)
         {
             try
@@ -168,8 +171,8 @@ namespace attendance_system_backend.Controllers
             }
         }
 
-        //DELETE: api/{employeeId}/attendance/{attendanceRecordId}
-        [HttpDelete("{employeeId}/attendance/{attendanceRecordId}")]
+        //DELETE: api/Employee/{employeeId}/delete-attendance/{attendanceRecordId}
+        [HttpDelete("{employeeId}/delete-attendance/{attendanceRecordId}")]
         public async Task<IActionResult> DeleteAttendanceRecord(int attendanceRecordId, int employeeId)
         {
             try
