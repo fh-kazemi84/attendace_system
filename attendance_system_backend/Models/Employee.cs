@@ -1,4 +1,3 @@
-
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using attendance_system_backend.Models.Enums;
@@ -33,38 +32,34 @@ namespace attendance_system_backend.Models
         public DateTime HireDate { get; set; }
 
         [Required(ErrorMessage = "Position is required.")]
-        [StringLength(50, ErrorMessage = "Position title can't be longer than 50 characters.")]
-        public string Position { get; set; }
+        public Position Position { get; set; }
 
         [Range(0, double.MaxValue, ErrorMessage = "Salary must be a non-negative value.")]
         public double Salary { get; set; }
 
         [Required(ErrorMessage = "Gender is required.")]
         public Gender Gender { get; set; }
-        
-        [Required(ErrorMessage = "Address ID is required.")]
+
+        [Required(ErrorMessage = "AddressId is required.")]
         public int AddressId { get; set; }
 
         [ForeignKey("AddressId")]
         public Address Address { get; set; }
-        
-        [Required(ErrorMessage = "Department ID is required.")]
+
+        [Required(ErrorMessage = "DepartmentId is required.")]
         public int DepartmentId { get; set; }
 
-        [ForeignKey("DepartmentId")]
-        public Department Department { get; set; }
-
-        [Required(ErrorMessage = "UserInfo ID is required.")]
+        [Required(ErrorMessage = "UserInfoId is required.")]
         public int UserInfoId { get; set; }
 
         [ForeignKey("UserInfoId")]
         public UserInfo UserInfo { get; set; }
-        
+
         public ICollection<AttendanceRecord> AttendanceRecords { get; set; }
 
         public Employee()
         {
-            AttendanceRecords = new List<AttendanceRecord>(); 
+            AttendanceRecords = new List<AttendanceRecord>();
         }
     }
 }
