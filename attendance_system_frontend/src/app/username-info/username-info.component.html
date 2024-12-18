@@ -1,0 +1,25 @@
+<div>
+    <button class="btn btn-primary" (click)="onEmployeeDetails()">Back</button>
+</div>
+
+@if(userInfo){
+<div class="container mt-1">
+    <h6>Employee Username and Password Information:</h6>
+    <table class="table table-hover">
+        <tbody class="text-start">
+            <tr>
+                <th scope="row">Username:</th>
+                <td>{{userInfo.username}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Password:</th>
+                <td>{{userInfo.passwordHash}}</td>
+            </tr>
+
+        </tbody>
+    </table>
+</div>
+}
+@else {
+<h2>Loding employee details...</h2>
+}
