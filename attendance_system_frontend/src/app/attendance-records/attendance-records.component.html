@@ -1,0 +1,40 @@
+<div>
+    <button class="btn btn-primary" (click)="onEmployeeDetails()">Back</button>
+</div>
+
+<div>
+    <h6>Employee Attendance Records</h6>
+    <ul>
+        @for(group of groupedAttendanceRecords; track group;){
+        <h6 class="text-primary">{{group.month}}</h6>
+        <div>
+            <table class="table table-hover">
+                <thead>
+                    <tr class="table table-success">
+                        <th scope="col">Index</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Checkin Time</th>
+                        <th scope="col">Checkout Time</th>
+                        <th scope="col"> </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (attendance of group.records; track attendance.id; let index = $index) {
+                    <tr>
+                        <th scope="row">{{index+1}}</th>
+                        <td>{{attendance.status}}</td>
+                        <td>{{attendance.date}}</td>
+                        <td>{{attendance.checkInTime || 'N/A'}}</td>
+                        <td>{{attendance.checkOutTime || 'N/A'}}</td>
+                        <td>
+                            <button class="btn btn-primary">Edit</button>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        }
+    </ul>
+</div>
