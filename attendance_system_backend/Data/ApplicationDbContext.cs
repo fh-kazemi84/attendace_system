@@ -19,7 +19,7 @@ namespace attendance_system_backend.Data
         {
             modelBuilder.Entity<Employee>()
                 .HasOne(e => e.Address)
-                .WithOne() 
+                .WithOne() //Assuming an employee can a address, and no reverse navigation
                 .HasForeignKey<Employee>(e => e.AddressId);
 
             modelBuilder.Entity<Employee>()
