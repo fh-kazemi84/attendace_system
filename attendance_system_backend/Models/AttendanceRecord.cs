@@ -23,8 +23,8 @@ namespace attendance_system_backend.Models
 
         public AttendanceRecord()
         {
-            Date = DateTime.UtcNow; // Initialize date to the current date and time in UTC
-            Status = AttendanceStatus.Absent; // Set default status to Absent            
+            Date = DateTime.UtcNow;
+            Status = AttendanceStatus.Absent;       
         }
 
         public double? GetTotalHoursWorked()
