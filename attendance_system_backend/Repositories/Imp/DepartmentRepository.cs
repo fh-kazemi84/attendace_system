@@ -1,4 +1,4 @@
-using attendance_system_backend.Data;
+﻿using attendance_system_backend.Data;
 using attendance_system_backend.Models;
 using Microsoft.EntityFrameworkCore;
 
