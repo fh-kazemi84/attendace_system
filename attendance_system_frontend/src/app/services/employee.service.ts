@@ -60,6 +60,10 @@ export class EmployeeService {
   }
 
   public deleteEmployee(id: number): Observable<Employee> {
-    return this.http.delete<Employee>(`${this.apiUrl}/delete/${id}` , {responseType: 'text' as 'json'});
+    return this.http.delete<Employee>(`${this.apiUrl}/delete/${id}`, { responseType: 'text' as 'json' });
+  }
+
+  public updateEmployee(id: number, employee: Employee): Observable<Employee> {
+    return this.http.put<Employee>(`${this.apiUrl}/update?id=${id}`, employee);
   }
 }
