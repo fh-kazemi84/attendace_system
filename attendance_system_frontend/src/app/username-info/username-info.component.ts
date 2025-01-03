@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { FormsModule, NgForm } from '@angular/forms';
 
 import { EmployeeService } from '../services/employee.service';
-import { Employee, UserInfo } from '../models/app-models';
-import { FormsModule, NgForm } from '@angular/forms';
+import { Employee } from '../models/app-models';
 
 @Component({
   selector: 'app-username-info',
@@ -36,7 +36,7 @@ export class UsernameInfoComponent implements OnInit {
     });
   }
 
-  public OnEmployeeDetails() {
+  public onEmployeeDetails() {
     this.router.navigate(['/admin/employees/details', this.selectedEmployeeId]);
   }
 
@@ -67,7 +67,7 @@ export class UsernameInfoComponent implements OnInit {
       this.employeeService.updateEmployee(this.selectedEmployeeId, this.foundEmployee).subscribe({
         next: (employee) => {
           alert('Employee updated successfully!');
-          this.OnEmployeeDetails();
+          this.onEmployeeDetails();
           this.editMode = false;
         },
         error: (err) => {
@@ -77,7 +77,7 @@ export class UsernameInfoComponent implements OnInit {
     }
   }
 
-  public OnDiesabledPaste($event: ClipboardEvent) {
+  public onDiesabledPaste($event: ClipboardEvent) {
     $event.preventDefault();
     alert('Paste Not Allowed!\nPlease retype password.');
   }
