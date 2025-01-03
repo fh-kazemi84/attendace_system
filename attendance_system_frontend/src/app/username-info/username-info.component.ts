@@ -2,19 +2,23 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
 import { EmployeeService } from '../services/employee.service';
-import { UserInfo } from '../models/app-models';
+import { Employee, UserInfo } from '../models/app-models';
+import { FormsModule, NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-username-info',
   standalone: true,
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './username-info.component.html',
   styleUrl: './username-info.component.css'
 })
 export class UsernameInfoComponent implements OnInit {
 
   selectedEmployeeId: number;
-  userInfo: UserInfo;
+  foundEmployee: Employee;
+  showPassword: boolean = false;
+  editMode: boolean = false;
+  rePassword: string = '';
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -26,13 +30,55 @@ export class UsernameInfoComponent implements OnInit {
 
       if (this.selectedEmployeeId) {
         this.employeeService.getEmployeeById(this.selectedEmployeeId).subscribe((employee) => {
-          this.userInfo = employee.userInfoDTO;
+          this.foundEmployee = employee;
         });
       }
     });
   }
 
-  public onEmployeeDetails() {
+  public OnEmployeeDetails() {
     this.router.navigate(['/admin/employees/details', this.selectedEmployeeId]);
+  }
+
+  public onUsernameInfo() {
+    if (window.confirm('Are you sure you want to cancel?')) {
+      this.editMode = false;
+    }
+  }
+
+  public togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
+  onEditMode() {
+    this.editMode = true;
+  }
+
+  onSubmit(usernameEditForm: NgForm) {
+    if (!this.foundEmployee.userInfoDTO.username ||
+      !this.foundEmployee.userInfoDTO.passwordHash ||
+      !this.rePassword) {
+      alert('Please fill username field.');
+    }
+    else if (this.foundEmployee.userInfoDTO.passwordHash != this.rePassword) {
+      alert('Password do not match.\nTry again.');
+    }
+    else {
+      this.employeeService.updateEmployee(this.selectedEmployeeId, this.foundEmployee).subscribe({
+        next: (employee) => {
+          alert('Employee updated successfully!');
+          this.OnEmployeeDetails();
+          this.editMode = false;
+        },
+        error: (err) => {
+          alert('Failed to update employee!');
+        }
+      });
+    }
+  }
+
+  public OnDiesabledPaste($event: ClipboardEvent) {
+    $event.preventDefault();
+    alert('Paste Not Allowed!\nPlease retype password.');
   }
 }
