@@ -85,6 +85,7 @@ namespace attendance_system_backend.Controllers
                     return BadRequest("Employee data is null.");
                 }
 
+                Response.Headers.Add("Access-Control-Allow-Origin", "*");
                 employeeDto.Id = id;
                 var updatedEmployee = await _employeeService.UpdateEmployeeAsync(employeeDto);
                 return Ok(updatedEmployee);
