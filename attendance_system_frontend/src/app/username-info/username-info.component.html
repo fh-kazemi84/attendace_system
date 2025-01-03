@@ -1,24 +1,78 @@
-<div>
-    <button class="btn btn-primary" (click)="onEmployeeDetails()">Back</button>
+<br>
+<div class="row">
+    <div class="col-md-4 form-group">
+        <div class="d-grid gap-2 d-md-flex justify-content">
+            @if (!editMode) {
+            <button class="btn btn-outline-primary" (click)="onEmployeeDetails()">Back</button>
+            <button class="btn btn-outline-success" (click)="onEditMode()">Edit</button>
+            }
+        </div>
+    </div>
 </div>
 
-@if(userInfo){
+@if(foundEmployee){
+@if(!editMode){
 <div class="container mt-1">
-    <h6>Employee Username and Password Information:</h6>
     <table class="table table-hover">
         <tbody class="text-start">
             <tr>
                 <th scope="row">Username:</th>
-                <td>{{userInfo.username}}</td>
+                <td>{{foundEmployee.userInfoDTO.username}}</td>
             </tr>
             <tr>
                 <th scope="row">Password:</th>
-                <td>{{userInfo.passwordHash}}</td>
+                <td>{{ showPassword ? foundEmployee.userInfoDTO.passwordHash : '******'}}
+                    <button class="btn btn-sm btn-outline-primary ms-2" (click)="togglePasswordVisibility()">
+                        {{showPassword ? 'Hide' : 'Show'}}</button>
+                </td>
             </tr>
-
         </tbody>
     </table>
 </div>
+}
+@else {
+<div>
+    <form #usernameEditForm="ngForm" (ngSubmit)="onSubmit(usernameEditForm)">
+        <h3>Edit</h3>
+        <div class="col-md-3 form-group">
+            <label for="username">Username:</label>
+            <input type="text" class="form-control" id="username" name="username"
+                [(ngModel)]="foundEmployee.userInfoDTO.username" #username="ngModel" required>
+            @if(username.invalid && username.touched){
+            <small class="text-danger">Required</small>
+            }
+        </div>
+        <div class="col-md-3 form-group">
+            <label for="passwordHash">Password:</label>
+            <input type="text" class="form-control" id="passwordHash" name="passwordHash"
+                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                [(ngModel)]="foundEmployee.userInfoDTO.passwordHash" #passwordHash="ngModel" required>
+            @if(passwordHash.invalid && passwordHash.touched){
+            <small class="text-danger">Required</small>
+            }
+            @if(passwordHash.errors?.['pattern']){
+            <small class="text-danger">Invalid</small>
+            }
+        </div>
+        <div class="col-md-3 form-group">
+            <label for="retype-password">Retype Password</label>
+            <input type="text" class="form-control" id="retype-password" name="retype-password"
+                (paste)="onDiesabledPaste($event)" [(ngModel)]="rePassword" #retypePassword="ngModel" required>
+            @if(retypePassword.touched && foundEmployee.userInfoDTO.passwordHash != rePassword){
+            <small class="text-danger">Not Matched</small>
+            }
+        </div>
+        <div class="col-md-3 form-group">
+            <br>
+            <div class="d-grid gap-2 d-md-flex justify-content">
+                <button type="submit" class="btn btn-success btn-sm">Save</button>
+                <button type="button" class="btn btn-warning" (click)="onUsernameInfo()">Cancel</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+}
 }
 @else {
 <h2>Loding employee details...</h2>
