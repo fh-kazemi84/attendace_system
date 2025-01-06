@@ -40,7 +40,7 @@ export class UsernameInfoComponent implements OnInit {
     this.router.navigate(['/admin/employees/details', this.selectedEmployeeId]);
   }
 
-  public onUsernameInfo() {
+  public onCancelForm() {
     if (window.confirm('Are you sure you want to cancel?')) {
       this.editMode = false;
     }
