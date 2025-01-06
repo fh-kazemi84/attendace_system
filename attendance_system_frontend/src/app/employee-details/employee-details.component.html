@@ -1,12 +1,13 @@
 @if(selectedEmployee){
 <br>
+@if(!editMode){
 <div class="row">
     <div class="col-md-5 form-group">
         <h5>Employee Details</h5>
     </div>
     <div class="col-md-3 form-group">
         <div class="d-grid gap-2 d-md-flex justify-content">
-            <button class="btn btn-success">Edit</button>
+            <button class="btn btn-success" (click)="onEditMode()">Edit</button>
             <button class="btn btn-danger" (click)="OnDeleteEmployee(selectedEmployee.id)">Delete</button>
             <button class="btn btn-outline-primary" (click)="onEmployeeList()">Back</button>
         </div>
@@ -24,6 +25,10 @@
                 <td>{{selectedEmployee.lastName}}</td>
             </tr>
             <tr>
+                <th scope="row">Gender:</th>
+                <td>{{gender}}</td>
+            </tr>
+            <tr>
                 <th scope="row">Email:</th>
                 <td>{{selectedEmployee.email}}</td>
             </tr>
@@ -33,27 +38,23 @@
             </tr>
             <tr>
                 <th scope="row">Hire Date:</th>
-                <td>{{selectedEmployee.hireDate}}</td>
-            </tr>
-            <tr>
-                <th scope="row">Position:</th>
-                <td>{{position}}</td>
-            </tr>
-            <tr>
-                <th scope="row">Salary:</th>
-                <td>{{selectedEmployee.salary}}</td>
-            </tr>
-            <tr>
-                <th scope="row">Gender:</th>
-                <td>{{gender}}</td>
+                <td>{{currentHireDate}}</td>
             </tr>
             <tr>
                 <th scope="row">Department:</th>
                 <td>{{department}}</td>
             </tr>
             <tr>
+                <th scope="row">Position:</th>
+                <td>{{position}}</td>
+            </tr>
+            <tr>
                 <th scope="row">Role:</th>
                 <td>{{userRole}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Salary:</th>
+                <td>{{selectedEmployee.salary}}</td>
             </tr>
             <tr>
                 <th scope="row">Address:</th>
@@ -66,18 +67,240 @@
             <tr>
                 <th scope="row">Username and password:</th>
                 <td>
-                    <button class="btn btn-outline-primary btn-sm" (click)="onUsernameInfo(selectedEmployee.id)">Info</button>
+                    <button class="btn btn-outline-primary btn-sm"
+                        (click)="onUsernameInfo(selectedEmployee.id)">Info</button>
                 </td>
             </tr>
             <tr>
                 <th scope="row">Attendance:</th>
                 <td>
-                    <button class="btn btn-outline-primary btn-sm" (click)="onEmployeeAttendance(selectedEmployee.id)">Records</button>
+                    <button class="btn btn-outline-primary btn-sm"
+                        (click)="onEmployeeAttendance(selectedEmployee.id)">Records</button>
                 </td>
             </tr>
         </tbody>
     </table>
 </div>
+}
+@else {
+<div>
+    <br>
+    <form #detailsEditMode="ngForm" (ngSubmit)="onSubmit(detailsEditMode)">
+        <h3>Edit Details of Employee</h3>
+        <br>
+        <div class="row">
+            <!--First Name-->
+            <div class="col-md-3 form-group">
+                <label for="firstName">First Name:</label>
+                <input type="text" class="form-control" id="firstName" name="firstName"
+                    [(ngModel)]="selectedEmployee.firstName" #firstName="ngModel" required>
+                @if(firstName.invalid && firstName.touched){
+                <small class="text-danger">Required</small>
+                }
+            </div>
+
+            <!--Last Name-->
+            <div class="col-md-3 form-group">
+                <label for="lastName">Last Name:</label>
+                <input type="text" class="form-control" id="lastName" name="lastName"
+                    [(ngModel)]="selectedEmployee.lastName" #lastName="ngModel" required>
+                @if(lastName.invalid && lastName.touched){
+                <small class="text-danger">Required</small>
+                }
+            </div>
+
+            <!--Gender-->
+            <div class="col-md-3 form-group">
+                <label>Gender:</label>
+                <div class="form-control form-radio">
+                    @for (gender of genders; track gender; let index = $index) {
+                    <div class="form-check form-check-inline">
+                        <input type="radio" class="form-check-input" id="{{gender}}" name="gender"
+                            [(ngModel)]="selectedEmployee.gender" [value]="gendersValue[index]" required>
+                        <label class="form-check-label" [for]="gender">{{gender}}</label>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <br>
+
+        <div class="row">
+            <!--Email-->
+            <div class="col-md-3 form-group">
+                <label for="email">Email:</label>
+                <input type="email" class="form-control" id="email" name="email" [(ngModel)]="selectedEmployee.email"
+                    pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$" #email="ngModel" required>
+                @if(email.invalid && email.touched){
+                @if(email.errors?.['required']){
+                <small class="text-danger">Required</small>
+                }
+                @if(email.errors?.['pattern']){
+                <small class="text-danger">Invalid</small>
+                }
+                }
+            </div>
+
+            <!--Phone Number-->
+            <div class="col-md-3 form-group">
+                <label for="phoneNumber">Phone Number:</label>
+                <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" pattern="^[0-9+ ]{11,}$"
+                    [(ngModel)]="selectedEmployee.phoneNumber" #phoneNumber="ngModel" required>
+                @if(phoneNumber.invalid && phoneNumber.touched){
+                @if(phoneNumber.errors?.['required']){
+                <small class="text-danger">Required</small>
+                }
+                @if(phoneNumber.errors?.['pattern']){
+                <small class="text-danger">Invalid</small>
+                }
+                }
+            </div>
+
+            <!--Salary-->
+            <div class="col-md-3 form-group">
+                <label for="salary">Salary:</label>
+                <input type="number" class="form-control" id="salary" name="salary"
+                    [ngModel]="selectedEmployee.salary === 0 ? null : selectedEmployee.salary"
+                    (ngModelChange)="selectedEmployee.salary = $event || 0" #salary="ngModel" required>
+                @if(salary.invalid && salary.touched){
+                <small class="text-danger">Required</small>
+                }
+            </div>
+        </div>
+        <br>
+
+        <div class="row">
+            <!--Department-->
+            <div class="col-md-3 form-group">
+                <label for="departmentId">Department:</label>
+                <select class="form-control custom-select" id="departmentId" name="departmentId"
+                    [(ngModel)]="selectedEmployee.departmentId" #department="ngModel">
+                    <option [value]="-1" disabled>---Select a Department---</option>
+                    @for(department of departments; track department; let index= $index){
+                    <option [value]="department.id">{{department.name}}</option>
+                    }
+                </select>
+                @if(selectedEmployee.departmentId === -1 && department.touched){
+                <small class="text-danger">Required</small>
+                }
+            </div>
+
+            <!--Position-->
+            <div class="col-md-3 form-group">
+                <label for="position">Position:</label>
+                <select class="form-control custom-select" id="position" name="position"
+                    [(ngModel)]="selectedEmployee.position" #position="ngModel">
+                    <option [value]="-1" disabled>---Select a Position---</option>
+                    @for(position of positions; track position; let index= $index){
+                    <option [value]="positionsValue[index]">{{position}}</option>
+                    }
+                </select>
+                @if(selectedEmployee.position === -1 && position.touched){
+                <small class="text-danger">Required</small>
+                }
+            </div>
+
+            <!--User Role-->
+            <div class="col-md-3 form-group">
+                <label for="role">User Role:</label>
+                <select class="form-control custom-select" id="role" name="role"
+                    [(ngModel)]="selectedEmployee.userInfoDTO.role" #role="ngModel">
+                    <option [value]="-1" disabled>---Select a Role---</option>
+                    @for(role of userRoles; track role; let index= $index){
+                    <option [value]="userRolesValue[index]">{{role}}</option>
+                    }
+                </select>
+                @if(selectedEmployee.userInfoDTO.role === -1 && role.touched){
+                <small class="text-danger">Required</small>
+                }
+            </div>
+        </div>
+        <br>
+
+        <div class="row">
+            <!--Hire Date-->
+            <div class="col-md-3 form-group">
+                <label for="hireDate">Hire Date:</label>
+                <input type="date" class="form-control" id="hireDate" name="hireDate"
+                    [(ngModel)]="selectedEmployee.hireDate" #hireDate="ngModel" required>
+                @if(hireDate.invalid && hireDate.touched){
+                <small class="text-danger">Required</small>
+                }
+            </div>
+            <div class="col-md-3 form-group">
+                <label for="currentHireDate">Current Date: {{currentHireDate}}</label>
+            </div>
+        </div>
+        <br>
+
+        <div class="row">
+            <label for="addressDTO">Address</label>
+            <!--Street & Nr.-->
+            <div class="col-md-3 form-group">
+                <label for="street">Street & Nr. :</label>
+                <input type="text" class="form-control" id="street" name="street"
+                    [(ngModel)]="selectedEmployee.addressDTO.street" #street="ngModel" required>
+                @if(street.invalid && street.touched){
+                <small class="text-danger">Required</small>
+                }
+            </div>
+
+            <!--City-->
+            <div class="col-md-3 form-group">
+                <label for="city">City:</label>
+                <input type="text" class="form-control" id="city" name="city"
+                    [(ngModel)]="selectedEmployee.addressDTO.city" #city="ngModel" required>
+                @if(city.invalid && city.touched){
+                <small class="text-danger">Required</small>
+                }
+            </div>
+
+            <!--State-->
+            <div class="col-md-3 form-group">
+                <label for="state">State:</label>
+                <input type="text" class="form-control" id="state" name="state"
+                    [(ngModel)]="selectedEmployee.addressDTO.state" #state="ngModel" required>
+                @if(state.invalid && state.touched){
+                <small class="text-danger">Required</small>
+                }
+            </div>
+        </div>
+        <br>
+
+        <div class="row">
+            <!--Postal Code-->
+            <div class="col-md-3 form-group">
+                <label for="postalCode">Postal Code:</label>
+                <input type="text" class="form-control" id="postalCode" name="postalCode"
+                    [(ngModel)]="selectedEmployee.addressDTO.postalCode" #postalCode="ngModel" required>
+                @if(postalCode.invalid && postalCode.touched){
+                <small class="text-danger">Required</small>
+                }
+            </div>
+
+            <!--Country-->
+            <div class="col-md-3 form-group">
+                <label for="country">Country:</label>
+                <input type="text" class="form-control" id="country" name="country"
+                    [(ngModel)]="selectedEmployee.addressDTO.country" #country="ngModel" required>
+                @if(country.invalid && country.touched){
+                <small class="text-danger">Required</small>
+                }
+            </div>
+
+            <!-- Buttons -->
+            <div class="col-md-3 form-group">
+                <br>
+                <div class="d-grid gap-2 d-md-flex justify-content">
+                    <button type="submit" class="btn btn-success">Update</button>
+                    <button type="button" class="btn btn-warning" (click)="onCancelForm()">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+}
 }
 @else {
 <h2>Loding employee details...</h2>
