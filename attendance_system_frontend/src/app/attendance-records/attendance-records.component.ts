@@ -119,6 +119,12 @@ export class AttendanceRecordsComponent implements OnInit {
   }
 
   public onDeleteRecord(selectedEmployeeId, attendancerRecordId) {
-
+    if (window.confirm('Are you sure you want to delete this employee?')) {
+      this.employeeService.deleteAttendanceRecord(selectedEmployeeId, attendancerRecordId).subscribe({
+        next: () => {
+          this.onLoadAttendanceRecords();
+        }
+      });
+    }
   }
 }
