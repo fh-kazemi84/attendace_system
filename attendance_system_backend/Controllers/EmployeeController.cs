@@ -25,7 +25,7 @@ namespace attendance_system_backend.Controllers
                 var employees = await _employeeService.GetAllEmployeesAsync();
                 return Ok(employees);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
@@ -39,7 +39,7 @@ namespace attendance_system_backend.Controllers
             {
                 Response.Headers.Add("Access-Control-Allow-Origin", "*");
                 var employee = await _employeeService.GetEmployeeByIdAsync(id);
-                if(employee == null)
+                if (employee == null)
                 {
                     return NotFound();
                 }
@@ -58,16 +58,16 @@ namespace attendance_system_backend.Controllers
         {
             try
             {
-                if(employeeDto == null)
+                if (employeeDto == null)
                 {
                     return BadRequest("Employee object is null.");
                 }
 
                 Response.Headers.Add("Access-Control-Allow-Origin", "*");
                 var createdEmployee = await _employeeService.AddEmployeeAsync(employeeDto);
-                return CreatedAtAction(nameof(GetEmployeeById), new { id = createdEmployee.Id}, createdEmployee);
+                return CreatedAtAction(nameof(GetEmployeeById), new { id = createdEmployee.Id }, createdEmployee);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
@@ -110,7 +110,7 @@ namespace attendance_system_backend.Controllers
                 }
                 return Ok("Employee deleted successfully. ");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
@@ -122,6 +122,7 @@ namespace attendance_system_backend.Controllers
         {
             try
             {
+                Response.Headers.Add("Access-Control-Allow-Origin", "*");
                 var attendanceRecords = await _employeeService.GetAttendanceRecordsByEmployeeIdAsync(employeeId);
                 return Ok(attendanceRecords);
             }
@@ -142,6 +143,7 @@ namespace attendance_system_backend.Controllers
                     return BadRequest("Attendance-Record object is null.");
                 }
 
+                Response.Headers.Add("Access-Control-Allow-Origin", "*");
                 var createdAttendanceRecord = await _employeeService.AddAttendanceRecodAsync(employeeId, attendanceRecordDto);
                 return CreatedAtAction(nameof(GetAttendanceRecords), new { id = createdAttendanceRecord.Id }, createdAttendanceRecord);
             }
@@ -162,6 +164,7 @@ namespace attendance_system_backend.Controllers
                     return BadRequest("Attendance-Record data is null.");
                 }
 
+                Response.Headers.Add("Access-Control-Allow-Origin", "*");
                 attendanceRecordDto.Id = attendanceRecordId;
                 var updatedAttendanceRecord = await _employeeService.UpdateAttendanceRecodAsync(employeeId, attendanceRecordDto);
                 return Ok(updatedAttendanceRecord);
@@ -178,6 +181,7 @@ namespace attendance_system_backend.Controllers
         {
             try
             {
+                Response.Headers.Add("Access-Control-Allow-Origin", "*");
                 var deletedAttendanceRecord = await _employeeService.DeleteAttendanceRecodAsync(attendanceRecordId, employeeId);
                 if (!deletedAttendanceRecord)
                 {
