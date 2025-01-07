@@ -102,6 +102,20 @@ namespace attendance_system_backend.Services.Imp
             }
         }
 
+        //Get attendance-record by employeeId and attendancerecordId
+        public async Task<AttendanceRecordDTO> GetAttendanceRecordByEmployeeIdAndAttendancerecordIdAsync(int employeeId, int attendanceRecordId)
+        {
+            try
+            {
+                var attendanceRecord = await _employeeRepository.GetAttendanceRecordByEmployeeIdAndAttendancerecordIdAsync(employeeId, attendanceRecordId);
+                return _mapper.Map<AttendanceRecordDTO>(attendanceRecord);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retreiving attendance-records: {ex.Message}");
+            }
+        }
+
         //Add attendance-recod to data source
         public async Task<AttendanceRecordDTO> AddAttendanceRecodAsync(int employeeId, AttendanceRecordDTO attendanceRecordDto)
         {
