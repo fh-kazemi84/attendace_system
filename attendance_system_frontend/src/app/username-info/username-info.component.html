@@ -6,8 +6,8 @@
     <div class="col-md-3 form-group">
         <div class="d-grid gap-2 d-md-flex justify-content">
             @if (!editMode) {
-            <button class="btn btn-outline-primary" (click)="onEmployeeDetails()">Back</button>
-            <button class="btn btn-outline-success" (click)="onEditMode()">Edit</button>
+                <button class="btn btn-success" (click)="onEditMode()">Edit</button>
+                <button class="btn btn-outline-primary" (click)="onEmployeeDetails()">Back</button>            
             }
         </div>
     </div>
@@ -36,7 +36,7 @@
 @else {
 <div>
     <form #usernameEditForm="ngForm" (ngSubmit)="onSubmit(usernameEditForm)">
-        <h3>Edit</h3>
+        <h3>Edit Username and Password</h3>
         <div class="col-md-3 form-group">
             <label for="username">Username:</label>
             <input type="text" class="form-control" id="username" name="username"
