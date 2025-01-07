@@ -66,4 +66,8 @@ export class EmployeeService {
   public updateEmployee(id: number, employee: Employee): Observable<Employee> {
     return this.http.put<Employee>(`${this.apiUrl}/update?id=${id}`, employee);
   }
+
+  public deleteAttendanceRecord(employeeId: number, attendanceRecordId: number): Observable<Employee> {
+    return this.http.delete<Employee>(`${this.apiUrl}/${employeeId}/delete-attendance/${attendanceRecordId}`, { responseType: 'text' as 'json' });
+  }
 }
