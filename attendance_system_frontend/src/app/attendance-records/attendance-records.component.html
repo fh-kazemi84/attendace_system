@@ -1,9 +1,17 @@
-<div>
-    <button class="btn btn-primary" (click)="onEmployeeDetails()">Back</button>
+<br>
+@if(!editMode && ! addMode){
+<div class="row">
+    <div class="col-md-5 form-group">
+        <h5>Attendance Records</h5>
+    </div>
+    <div class="col-md-3 form-group">
+        <div class="d-grid gap-2 d-md-flex justify-content">
+            <button class="btn btn-success" (click)="onAddMode()">Add</button>
+            <button class="btn btn-outline-primary" (click)="onEmployeeDetails()">Back</button>
+        </div>
+    </div>
 </div>
-
 <div>
-    <h6>Employee Attendance Records</h6>
     <ul>
         @for(group of groupedAttendanceRecords; track group;){
         <h6 class="text-primary">{{group.month}}</h6>
@@ -27,8 +35,9 @@
                         <td>{{attendance.date}}</td>
                         <td>{{attendance.checkInTime || 'N/A'}}</td>
                         <td>{{attendance.checkOutTime || 'N/A'}}</td>
-                        <td>
-                            <button class="btn btn-primary">Edit</button>
+                        <td class="d-grid gap-2 d-md-flex justify-content">
+                            <button class="btn btn-primary" (click)="onEditMode()">Edit</button>
+                            <button class="btn btn-danger" (click)="onDeleteRecord(selectedEmployeeId, attendance.id)">Delete</button>
                         </td>
                     </tr>
                     }
@@ -38,3 +47,7 @@
         }
     </ul>
 </div>
+}
+@else {
+
+}

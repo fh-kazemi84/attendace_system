@@ -17,6 +17,9 @@ export class AttendanceRecordsComponent implements OnInit {
   //attendanceRecords: any[];
   groupedAttendanceRecords: { month: string; records: any[] }[];
 
+  editMode: boolean = false;
+  addMode: boolean = false;
+
   constructor(private route: ActivatedRoute,
     private router: Router,
     private employeeService: EmployeeService) { }
@@ -42,21 +45,24 @@ export class AttendanceRecordsComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe((params: Params) => {
       this.selectedEmployeeId = +params['id'];
-
-      if (this.selectedEmployeeId) {
-        this.employeeService.getEmployeeById(this.selectedEmployeeId).subscribe((employee) => {
-          const records = employee.attendanceRecordDTOs.map(record => ({
-            ...record,
-            date: new Date(record.date).toISOString().split('T')[0],
-            checkInTime: record.checkInTime ? new Date(record.checkInTime).toTimeString().split(' ')[0] : null,
-            checkOutTime: record.checkOutTime ? new Date(record.checkOutTime).toTimeString().split(' ')[0] : null,
-            status: this.setStatus(record.status)
-          }));
-
-          this.groupedAttendanceRecords = this.groupByMonth(records);
-        });
-      }
+      this.onLoadAttendanceRecords();
     });
+  }
+
+  public onLoadAttendanceRecords() {
+    if (this.selectedEmployeeId) {
+      this.employeeService.getEmployeeById(this.selectedEmployeeId).subscribe((employee) => {
+        const records = employee.attendanceRecordDTOs.map(record => ({
+          ...record,
+          date: new Date(record.date).toISOString().split('T')[0],
+          checkInTime: record.checkInTime ? new Date(record.checkInTime).toTimeString().split(' ')[0] : null,
+          checkOutTime: record.checkOutTime ? new Date(record.checkOutTime).toTimeString().split(' ')[0] : null,
+          status: this.setStatus(record.status)
+        }));
+
+        this.groupedAttendanceRecords = this.groupByMonth(records);
+      });
+    }
   }
 
   public setStatus(status: number): string {
@@ -102,5 +108,17 @@ export class AttendanceRecordsComponent implements OnInit {
 
   public onEmployeeDetails() {
     this.router.navigate(['/admin/employees/details', this.selectedEmployeeId]);
+  }
+
+  public onEditMode() {
+    this.editMode = true;
+  }
+
+  public onAddMode() {
+    this.addMode = true;
+  }
+
+  public onDeleteRecord(selectedEmployeeId, attendancerRecordId) {
+
   }
 }
