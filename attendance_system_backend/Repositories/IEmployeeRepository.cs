@@ -11,6 +11,7 @@ namespace attendance_system_backend.Repositories
         Task<bool> DeleteEmployeeAsync(int id);
 
         Task<IEnumerable<AttendanceRecord>> GetAttendanceRecordsByEmployeeIdAsync(int employeeId);
+        Task<AttendanceRecord> GetAttendanceRecordByEmployeeIdAndAttendancerecordIdAsync(int employeeId, int attendanceRecordId);
         Task<AttendanceRecord> AddAttendanceRecodAsync(int employeeId, AttendanceRecord attendanceRecord);
         Task<AttendanceRecord> UpdateAttendanceRecodAsync(int employeeId, AttendanceRecord attendanceRecord);
         Task<bool> DeleteAttendanceRecodAsync(int attendanceRecordId, int employeeId);

@@ -201,6 +201,32 @@ namespace attendance_system_backend.Repositories.Imp
             }
         }
 
+        //Get attendance-record by employeeId and attendancerecordId
+        public async Task<AttendanceRecord> GetAttendanceRecordByEmployeeIdAndAttendancerecordIdAsync(int employeeId, int attendanceRecordId)
+        {
+            try
+            {
+                var employee = await GetEmployeeByIdAsync(employeeId);
+                if (employee == null)
+                {
+                    throw new Exception($"Could not find employee with id: {employeeId}");
+                }
+
+                var existingAttendanceRecord = employee.AttendanceRecords
+                    .FirstOrDefault(ar => ar.Id == attendanceRecordId);
+                if (existingAttendanceRecord == null)
+                {
+                    throw new Exception($"Could not find attendance-record with id: {attendanceRecordId}");
+                }
+
+                return existingAttendanceRecord;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Could not update employee {ex.Message}");
+            }
+        }
+
         //Add attendance-recod to data source
         public async Task<AttendanceRecord> AddAttendanceRecodAsync(int employeeId, AttendanceRecord attendanceRecord)
         {
