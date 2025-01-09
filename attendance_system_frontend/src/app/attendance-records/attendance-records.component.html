@@ -36,8 +36,8 @@
                         <td>{{attendance.checkInTime || 'N/A'}}</td>
                         <td>{{attendance.checkOutTime || 'N/A'}}</td>
                         <td class="d-grid gap-2 d-md-flex justify-content">
-                            <button class="btn btn-primary" (click)="onEditMode()">Edit</button>
-                            <button class="btn btn-danger" (click)="onDeleteRecord(selectedEmployeeId, attendance.id)">Delete</button>
+                            <button class="btn btn-primary" (click)="onEditMode(attendance.id)">Edit</button>
+                            <button class="btn btn-danger" (click)="onDeleteRecord(attendance.id)">Delete</button>
                         </td>
                     </tr>
                     }
@@ -48,6 +48,76 @@
     </ul>
 </div>
 }
-@else {
+@else if(editMode){
+<div>
+    <br>
+    <form #recordEditMode="ngForm" (ngSubmit)="onSubmit()">
+        <h3>Edit Attendance Record</h3>
+        <br>
+
+        <!--Date-->
+        <div class="row">
+            <div class="col-md-3 form-group">
+                <label for="date">Date: {{this.editedRecord.date}}</label>
+            </div>
+        </div>
+        <br>
+
+        <!--CheckIn Time-->
+        <div class="row">
+            <div class="col-md-3 form-group">
+                <label for="checkInTime">CheckIn Time:</label>
+                <input type="time" class="form-control" id="checkInTime" name="date"
+                    [(ngModel)]="this.editedRecord.checkInTime" #checkInTime="ngModel" required>
+                @if(checkInTime.invalid && checkInTime.touched){
+                <small class="text-danger">Required</small>
+                }
+            </div>
+        </div>
+        <br>
+
+        <!--CheckOut Time-->
+        <div class="row">
+            <div class="col-md-3 form-group">
+                <label for="checkOutTime">CheckOut Time:</label>
+                <input type="time" class="form-control" id="checkOutTime" name="checkOutTime"
+                    [(ngModel)]="this.editedRecord.checkOutTime" #checkOutTime="ngModel" required>
+                @if(checkOutTime.invalid && checkOutTime.touched){
+                <small class="text-danger">Required</small>
+                }
+            </div>
+        </div>
+        <br>
+
+        <!--Attendance Status-->
+        <div class="row">
+            <div class="col-md-3 form-group">
+                <label for="status">Attendance Status:</label>
+                <select class="form-control custom-select" id="status" name="status"
+                    [(ngModel)]="this.editedRecord.status" #status="ngModel">
+                    <option [value]="-1" disabled>---Select a Status---</option>
+                    @for(status of attendanceStatuses; track status; let index= $index){
+                    <option [value]="attendanceStatusValue[index]">{{status}}</option>
+                    }
+                </select>
+                @if(status.invalid && status.touched){
+                <small class="text-danger">Required</small>
+                }
+            </div>
+        </div>
+        <br>
+
+        <!-- Buttons -->
+        <div class="row">
+            <div class="col-md-3 form-group">
+                <br>
+                <div class="d-grid gap-2 d-md-flex justify-content">
+                    <button type="submit" class="btn btn-success">Update</button>
+                    <button type="button" class="btn btn-warning" (click)="onCancelForm()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
 
 }
