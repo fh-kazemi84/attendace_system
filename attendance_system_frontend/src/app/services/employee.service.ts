@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 
-import { Employee, Address, UserInfo } from '../models/app-models';
+import { Employee, Address, UserInfo, AttendanceRecord } from '../models/app-models';
 
 @Injectable({
   providedIn: 'root'
@@ -67,7 +67,7 @@ export class EmployeeService {
     return this.http.put<Employee>(`${this.apiUrl}/update?id=${id}`, employee);
   }
 
-  public deleteAttendanceRecord(employeeId: number, attendanceRecordId: number): Observable<Employee> {
-    return this.http.delete<Employee>(`${this.apiUrl}/${employeeId}/delete-attendance/${attendanceRecordId}`, { responseType: 'text' as 'json' });
+  public deleteAttendanceRecord(employeeId: number, attendancerRecordId: number): Observable<AttendanceRecord> {
+    return this.http.delete<AttendanceRecord>(`${this.apiUrl}/${employeeId}/delete-attendance/${attendancerRecordId}`, { responseType: 'text' as 'json' });
   }
 }
