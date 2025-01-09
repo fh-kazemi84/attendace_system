@@ -78,4 +78,8 @@ export class EmployeeService {
   public deleteAttendanceRecord(employeeId: number, attendancerRecordId: number): Observable<AttendanceRecord> {
     return this.http.delete<AttendanceRecord>(`${this.apiUrl}/${employeeId}/delete-attendance/${attendancerRecordId}`, { responseType: 'text' as 'json' });
   }
+
+  public updateAttendanceRecord(employeeId: number, attendancerRecordId: number, attendanceRecord: AttendanceRecord): Observable<AttendanceRecord> {
+    return this.http.put<AttendanceRecord>(`${this.apiUrl}/${employeeId}/update-attendance/${attendancerRecordId}`, attendanceRecord);
+  }
 }
