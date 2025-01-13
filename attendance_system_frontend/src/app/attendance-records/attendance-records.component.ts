@@ -145,21 +145,27 @@ export class AttendanceRecordsComponent implements OnInit {
 
   public onEditSubmit() {
     if (this.editMode) {
-      this.onUpdatedRecord();
-      this.employeeService.updateAttendanceRecord(
-        this.selectedEmployeeId,
-        this.updatedAttendanceRecord.id,
-        this.updatedAttendanceRecord
-      ).subscribe({
-        next: (record) => {
-          alert('Attendance Record updated successfully!');
-          this.onLoadAttendanceRecords();
-          this.editMode = false;
-        },
-        error: (err) => {
-          alert('Failed to update Attendance Record!');
-        }
-      });
+      if (this.selectedAttendanceRecord.checkInTime &&
+        this.selectedAttendanceRecord.checkOutTime &&
+        this.selectedAttendanceRecord.checkOutTime < this.selectedAttendanceRecord.checkInTime) {
+        alert('CheckOut Time is smaller than checkIn time.\n Try again');
+      } else {
+        this.onUpdatedRecord();
+        this.employeeService.updateAttendanceRecord(
+          this.selectedEmployeeId,
+          this.updatedAttendanceRecord.id,
+          this.updatedAttendanceRecord
+        ).subscribe({
+          next: (record) => {
+            alert('Attendance Record updated successfully!');
+            this.onLoadAttendanceRecords();
+            this.editMode = false;
+          },
+          error: (err) => {
+            alert('Failed to update Attendance Record!');
+          }
+        });
+      }
     }
   }
 
