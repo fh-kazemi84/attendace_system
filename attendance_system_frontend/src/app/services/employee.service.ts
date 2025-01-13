@@ -82,4 +82,8 @@ export class EmployeeService {
   public updateAttendanceRecord(employeeId: number, attendancerRecordId: number, attendanceRecord: AttendanceRecord): Observable<AttendanceRecord> {
     return this.http.put<AttendanceRecord>(`${this.apiUrl}/${employeeId}/update-attendance/${attendancerRecordId}`, attendanceRecord);
   }
+
+  public addAttendaceRecord(employeeId: number, attendanceRecord: AttendanceRecord): Observable<AttendanceRecord> {
+    return this.http.post<AttendanceRecord>(`${this.apiUrl}/${employeeId}/add-attendance`, attendanceRecord);
+  }
 }
