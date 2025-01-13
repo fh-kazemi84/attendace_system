@@ -87,7 +87,7 @@ export class EmployeeService {
     return this.http.post<AttendanceRecord>(`${this.apiUrl}/${employeeId}/add-attendance`, attendanceRecord);
   }
 
-  public findAttendaceRecordByEmployeeIdAndDate(employeeId: number, attendaceRecordDate: Date): Observable<boolean> {
+  public findAttendanceRecordByEmployeeIdAndDate(employeeId: number, attendaceRecordDate: Date): Observable<boolean> {
     return this.getAttendanceRecords(employeeId).pipe(
       map(records => {
         return records.some(record => {
