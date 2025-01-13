@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 
 import { EmployeeService } from '../services/employee.service';
 import { AttendanceRecord, AttendanceStatus } from '../models/app-models';
@@ -24,6 +24,7 @@ export class AttendanceRecordsComponent implements OnInit {
   selectedAttendanceRecord: AttendanceRecord;
   editedRecord: any;
   updatedAttendanceRecord: AttendanceRecord;
+  newRecord: AttendanceRecord;
 
   attendanceStatuses = Object.keys(AttendanceStatus).filter(key => isNaN(Number(key)));
   attendanceStatusValue = Object.values(AttendanceStatus).filter(value => !isNaN(Number(value)));
@@ -179,6 +180,61 @@ export class AttendanceRecordsComponent implements OnInit {
       checkInTime: new Date(checkInTime),
       checkOutTime: new Date(checkOutTime)
     };
+  }
+
+  public onAddMode() {
+    this.newRecord = {
+      id: 0,
+      date: new Date(),
+      status: -1
+    };
+
+    this.addMode = true;
+  }
+
+  public onAddSubmit(recordAddMode: NgForm) {
+    if (this.addMode) {
+      if (recordAddMode.invalid ||
+        this.newRecord.status == -1
+      ) {
+        alert('Please fill out all fields.');
+      }
+      else if (this.newRecord.checkInTime &&
+        this.newRecord.checkOutTime &&
+        this.newRecord.checkOutTime < this.newRecord.checkInTime) {
+        alert('CheckOut Time is smaller than checkIn time.\n Try again');
+      }
+      else {
+        this.onAddedRecord();
+        this.employeeService.addAttendaceRecord(
+          this.selectedEmployeeId,
+          this.updatedAttendanceRecord
+        ).subscribe({
+          next: (record) => {
+            alert('Attendance Record added successfully!');
+            this.onLoadAttendanceRecords();
+            this.addMode = false;
+          },
+          error: (err) => {
+            alert('Failed to add Attendance Record!');
+          }
+        });
+      }
+    }
+  }
+
+  public onAddedRecord() {
+    const date = new Date(this.newRecord.date).toISOString().split('T')[0];
+    const checkInTime = `${date}T${this.newRecord.checkInTime}:00Z`;
+    const checkOutTime = `${date}T${this.newRecord.checkOutTime}:00Z`;
+
+    this.updatedAttendanceRecord = {
+      ...this.newRecord,
+      date: new Date(date),
+      checkInTime: new Date(checkInTime),
+      checkOutTime: new Date(checkOutTime),
+      status: this.newRecord.status
+    }
   }
 
   public onCancelForm() {
