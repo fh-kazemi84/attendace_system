@@ -85,6 +85,7 @@ namespace attendance_system_backend.Controllers
                     return BadRequest("Employee data is null.");
                 }
 
+                Response.Headers.Add("Access-Control-Allow-Origin", "*");
                 departmentDto.Id = id;
                 var updatedDepartment = await _departmentService.UpdateDepartmentAsync(departmentDto);
                 return Ok(updatedDepartment);
@@ -101,6 +102,7 @@ namespace attendance_system_backend.Controllers
         {
             try
             {
+                Response.Headers.Add("Access-Control-Allow-Origin", "*");
                 var deletedDepartment = await _departmentService.DeleteDepartmentAsync(id);
                 if (!deletedDepartment)
                 {
