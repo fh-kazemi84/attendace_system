@@ -15,6 +15,7 @@ import { AttendanceRecord, AttendanceStatus } from '../models/app-models';
 export class AttendanceRecordsComponent implements OnInit {
 
   selectedEmployeeId: number;
+  //attendanceRecords: any[];
   groupedAttendanceRecords: { month: string; records: any[] }[];
 
   editMode: boolean = false;
@@ -32,6 +33,23 @@ export class AttendanceRecordsComponent implements OnInit {
     private router: Router,
     private employeeService: EmployeeService) { }
 
+  // ngOnInit(): void {
+  //   this.route.params.subscribe((params: Params) => {
+  //     this.selectedEmployeeId = +params['id'];
+
+  //     if (this.selectedEmployeeId) {
+  //       this.employeeService.getEmployeeById(this.selectedEmployeeId).subscribe((employee) => {
+  //         this.attendanceRecords = employee.attendanceRecordDTOs.map(record => ({
+  //           ...record,
+  //           date: new Date(record.date).toISOString().split('T')[0],
+  //           checkInTime: record.checkInTime ? new Date(record.checkInTime).toTimeString().split(' ')[0] : null,
+  //           checkOutTime: record.checkOutTime ? new Date(record.checkOutTime).toTimeString().split(' ')[0] : null,
+  //           status: this.setStatus(record.status)
+  //         }));
+  //       });
+  //     };
+  //   });
+  // }
 
   ngOnInit(): void {
     this.route.params.subscribe((params: Params) => {
@@ -75,6 +93,12 @@ export class AttendanceRecordsComponent implements OnInit {
       const dateB = new Date(b.date);
       return dateB.getTime() - dateA.getTime(); //decending sort
     });
+
+    // records.forEach(record => {
+    //   const date = new Date(record.date);
+    //   const month = `${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`;
+
+    //sorted year and then month
 
     sortedRecords.forEach(record => {
       const date = new Date(record.date);
