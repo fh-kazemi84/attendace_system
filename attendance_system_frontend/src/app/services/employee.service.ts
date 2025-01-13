@@ -86,4 +86,17 @@ export class EmployeeService {
   public addAttendaceRecord(employeeId: number, attendanceRecord: AttendanceRecord): Observable<AttendanceRecord> {
     return this.http.post<AttendanceRecord>(`${this.apiUrl}/${employeeId}/add-attendance`, attendanceRecord);
   }
+
+  public findAttendaceRecordByEmployeeIdAndDate(employeeId: number, attendaceRecordDate: Date): Observable<boolean> {
+    return this.getAttendanceRecords(employeeId).pipe(
+      map(records => {
+        return records.some(record => {
+          const recordDate = new Date(record.date).toISOString().split('T')[0];
+          const inputDate = new Date(attendaceRecordDate).toISOString().split('T')[0];
+          return recordDate === inputDate;
+        })
+      })
+    );
+  }
+
 }
