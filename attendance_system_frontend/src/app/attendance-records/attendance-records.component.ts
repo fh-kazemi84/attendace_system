@@ -15,7 +15,6 @@ import { AttendanceRecord, AttendanceStatus } from '../models/app-models';
 export class AttendanceRecordsComponent implements OnInit {
 
   selectedEmployeeId: number;
-  //attendanceRecords: any[];
   groupedAttendanceRecords: { month: string; records: any[] }[];
 
   editMode: boolean = false;
@@ -33,23 +32,6 @@ export class AttendanceRecordsComponent implements OnInit {
     private router: Router,
     private employeeService: EmployeeService) { }
 
-  // ngOnInit(): void {
-  //   this.route.params.subscribe((params: Params) => {
-  //     this.selectedEmployeeId = +params['id'];
-
-  //     if (this.selectedEmployeeId) {
-  //       this.employeeService.getEmployeeById(this.selectedEmployeeId).subscribe((employee) => {
-  //         this.attendanceRecords = employee.attendanceRecordDTOs.map(record => ({
-  //           ...record,
-  //           date: new Date(record.date).toISOString().split('T')[0],
-  //           checkInTime: record.checkInTime ? new Date(record.checkInTime).toTimeString().split(' ')[0] : null,
-  //           checkOutTime: record.checkOutTime ? new Date(record.checkOutTime).toTimeString().split(' ')[0] : null,
-  //           status: this.setStatus(record.status)
-  //         }));
-  //       });
-  //     };
-  //   });
-  // }
 
   ngOnInit(): void {
     this.route.params.subscribe((params: Params) => {
@@ -93,12 +75,6 @@ export class AttendanceRecordsComponent implements OnInit {
       const dateB = new Date(b.date);
       return dateB.getTime() - dateA.getTime(); //decending sort
     });
-
-    // records.forEach(record => {
-    //   const date = new Date(record.date);
-    //   const month = `${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`;
-
-    //sorted year and then month
 
     sortedRecords.forEach(record => {
       const date = new Date(record.date);
@@ -205,20 +181,33 @@ export class AttendanceRecordsComponent implements OnInit {
         alert('CheckOut Time is smaller than checkIn time.\n Try again');
       }
       else {
-        this.onAddedRecord();
-        this.employeeService.addAttendaceRecord(
+        this.employeeService.findAttendanceRecordByEmployeeIdAndDate(
           this.selectedEmployeeId,
-          this.updatedAttendanceRecord
+          this.newRecord.date
         ).subscribe({
-          next: (record) => {
-            alert('Attendance Record added successfully!');
-            this.onLoadAttendanceRecords();
-            this.addMode = false;
-          },
-          error: (err) => {
-            alert('Failed to add Attendance Record!');
+          next: (exists) => {
+            console.log(exists);
+            if (!exists) {
+              alert('Please select another date.\nThere is this date.')
+            }
+            else {
+              this.onAddedRecord();
+              this.employeeService.addAttendaceRecord(
+                this.selectedEmployeeId,
+                this.updatedAttendanceRecord
+              ).subscribe({
+                next: (record) => {
+                  alert('Attendance Record added successfully!');
+                  this.onLoadAttendanceRecords();
+                  this.addMode = false;
+                },
+                error: (err) => {
+                  alert('Failed to add Attendance Record!');
+                }
+              });
+            }
           }
-        });
+        })
       }
     }
   }
