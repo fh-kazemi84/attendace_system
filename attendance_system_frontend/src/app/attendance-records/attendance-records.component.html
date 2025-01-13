@@ -128,5 +128,80 @@
 
 }
 @else if(addMode){
+<div>
+    <br>
+    <form #recordAddMode="ngForm" (ngSubmit)="onAddSubmit(recordAddMode)">
+        <h3>Add New Attendance Record</h3>
+        <br>
 
+        <!--Date-->
+        <div class="row">
+            <div class="col-md-4 form-group">
+                <label for="date">Date:</label>
+                <input type="date" class="form-control" id="date" name="date" [(ngModel)]="this.newRecord.date"
+                    #date="ngModel" required>
+                @if(date.invalid && date.touched){
+                <small class="text-danger">Required</small>
+                }
+            </div>
+        </div>
+        <br>
+
+        <!--CheckIn Time-->
+        <div class="row">
+            <div class="col-md-4 form-group">
+                <label for="checkInTime">CheckIn Time:</label>
+                <input type="time" class="form-control" id="checkInTime" name="checkInTime"
+                    [(ngModel)]="this.newRecord.checkInTime" #checkInTime="ngModel" required>
+                @if(checkInTime.invalid && checkInTime.touched){
+                <small class="text-danger">Required</small>
+                }
+            </div>
+        </div>
+        <br>
+
+        <!--CheckOut Time-->
+        <div class="row">
+            <div class="col-md-4 form-group">
+                <label for="checkOutTime">CheckOut Time:</label>
+                <input type="time" class="form-control" id="checkOutTime" name="checkOutTime"
+                    [(ngModel)]="this.newRecord.checkOutTime" #checkOutTime="ngModel" required>
+                @if(checkOutTime.invalid && checkOutTime.touched){
+                <small class="text-danger">Required</small>
+                }
+            </div>
+        </div>
+        <br>
+
+        <!--Attendance Status-->
+        <div class="row">
+            <div class="col-md-4 form-group">
+                <label for="status">Attendance Status:</label>
+                <select class="form-control custom-select" id="status" name="status" [(ngModel)]="this.newRecord.status"
+                    #status="ngModel">
+                    <option [value]="-1" disabled>---Select a Status---</option>
+                    @for(status of attendanceStatuses; track status; let index= $index){
+                    <option [value]="attendanceStatusValue[index]">{{status}}</option>
+                    }
+                </select>
+                @if(status.invalid && status.touched){
+                <small class="text-danger">Required</small>
+                }
+
+            </div>
+        </div>
+        <br>
+
+        <!-- Buttons -->
+        <div class="row">
+            <div class="col-md-3 form-group">
+                <br>
+                <div class="d-grid gap-2 d-md-flex justify-content">
+                    <button type="submit" class="btn btn-success">Add</button>
+                    <button type="button" class="btn btn-warning" (click)="onCancelForm()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
 }
