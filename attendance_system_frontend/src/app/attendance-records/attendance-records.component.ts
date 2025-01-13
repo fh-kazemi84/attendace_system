@@ -62,9 +62,9 @@ export class AttendanceRecordsComponent implements OnInit {
       this.employeeService.getEmployeeById(this.selectedEmployeeId).subscribe((employee) => {
         const records = employee.attendanceRecordDTOs.map(record => ({
           ...record,
-          date: new Date(record.date).toISOString().split('T')[0],
-          checkInTime: record.checkInTime ? new Date(record.checkInTime).toTimeString().split(' ')[0] : null,
-          checkOutTime: record.checkOutTime ? new Date(record.checkOutTime).toTimeString().split(' ')[0] : null,
+          date: new Date(record.date).toLocaleDateString('en-CA'),
+          checkInTime: record.checkInTime ? new Date(record.checkInTime).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : null,
+          checkOutTime: record.checkOutTime ? new Date(record.checkOutTime).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : null,
           status: this.setStatus(record.status)
         }));
         this.groupedAttendanceRecords = this.groupByMonth(records);
@@ -118,26 +118,6 @@ export class AttendanceRecordsComponent implements OnInit {
     this.router.navigate(['/admin/employees/details', this.selectedEmployeeId]);
   }
 
-  public onEditMode(attendancerRecordId) {
-    this.employeeService.getAttendanceRecordById(this.selectedEmployeeId, attendancerRecordId)
-      .subscribe((record) => {
-        this.selectedAttendanceRecord = { ...record };
-
-        this.editedRecord = {
-          date: new Date(this.selectedAttendanceRecord.date).toISOString().split('T')[0],
-          checkInTime: this.selectedAttendanceRecord.checkInTime ? new Date(this.selectedAttendanceRecord.checkInTime).toTimeString().split(' ')[0] : null,
-          checkOutTime: this.selectedAttendanceRecord.checkOutTime ? new Date(this.selectedAttendanceRecord.checkOutTime).toTimeString().split(' ')[0] : null,
-          status: this.selectedAttendanceRecord.status
-        }
-
-        this.editMode = true;
-      });
-  }
-
-  public onAddMode() {
-    this.addMode = true;
-  }
-
   public onDeleteRecord(attendancerRecordId) {
     if (window.confirm('Are you sure you want to delete this employee?')) {
       this.employeeService.deleteAttendanceRecord(this.selectedEmployeeId, attendancerRecordId).subscribe({
@@ -148,7 +128,22 @@ export class AttendanceRecordsComponent implements OnInit {
     }
   }
 
-  public onSubmit() {
+  public onEditMode(attendancerRecordId) {
+    this.employeeService.getAttendanceRecordById(this.selectedEmployeeId, attendancerRecordId)
+      .subscribe((record) => {
+        this.selectedAttendanceRecord = record;
+
+        this.editedRecord = {
+          ...this.selectedAttendanceRecord,
+          date: new Date(this.selectedAttendanceRecord.date).toLocaleDateString('en-CA'),
+          checkInTime: record.checkInTime ? new Date(record.checkInTime).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : null,
+          checkOutTime: record.checkOutTime ? new Date(record.checkOutTime).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : null,
+        }
+        this.editMode = true;
+      });
+  }
+
+  public onEditSubmit() {
     if (this.editMode) {
       this.onUpdatedRecord();
       this.employeeService.updateAttendanceRecord(
@@ -162,25 +157,21 @@ export class AttendanceRecordsComponent implements OnInit {
           this.editMode = false;
         },
         error: (err) => {
-          alert('Failed to update employee!');
+          alert('Failed to update Attendance Record!');
         }
       });
-    }
-    else if (this.addMode) {
-
     }
   }
 
   public onUpdatedRecord() {
-    const checkInTime = new Date(`${this.editedRecord.date}T${this.editedRecord.checkInTime}Z`);
-    const checkOutTime = new Date(`${this.editedRecord.date}T${this.editedRecord.checkOutTime}Z`);
-    const status = this.editedRecord.status;
+    const date = new Date(this.selectedAttendanceRecord.date).toLocaleDateString('en-CA');
+    const checkInTime = `${date}T${this.selectedAttendanceRecord.checkInTime}:00Z`;
+    const checkOutTime = `${date}T${this.selectedAttendanceRecord.checkOutTime}:00Z`;
+
     this.updatedAttendanceRecord = {
       ...this.selectedAttendanceRecord,
-      date: new Date(this.editedRecord.date),
-      checkInTime: checkInTime,
-      checkOutTime: checkOutTime,
-      status: status
+      checkInTime: new Date(checkInTime),
+      checkOutTime: new Date(checkOutTime)
     };
   }
 
@@ -188,6 +179,7 @@ export class AttendanceRecordsComponent implements OnInit {
     if (window.confirm('Are you sure you want to cancel?')) {
       this.onLoadAttendanceRecords();
       this.editMode = false;
+      this.addMode = false;
     }
   }
 }

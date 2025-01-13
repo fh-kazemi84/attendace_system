@@ -51,14 +51,14 @@
 @else if(editMode){
 <div>
     <br>
-    <form #recordEditMode="ngForm" (ngSubmit)="onSubmit()">
+    <form #recordEditMode="ngForm" (ngSubmit)="onEditSubmit()">
         <h3>Edit Attendance Record</h3>
         <br>
 
         <!--Date-->
         <div class="row">
             <div class="col-md-3 form-group">
-                <label for="date">Date: {{this.editedRecord.date}}</label>
+                <label for="date">Date: {{editedRecord.date}}</label>
             </div>
         </div>
         <br>
@@ -67,13 +67,16 @@
         <div class="row">
             <div class="col-md-3 form-group">
                 <label for="checkInTime">CheckIn Time:</label>
-                <input type="time" class="form-control" id="checkInTime" name="date"
-                    [(ngModel)]="this.editedRecord.checkInTime" #checkInTime="ngModel" required>
+                <input type="time" class="form-control" id="checkInTime" name="checkInTime"
+                    [(ngModel)]="this.selectedAttendanceRecord.checkInTime" #checkInTime="ngModel" required>
                 @if(checkInTime.invalid && checkInTime.touched){
                 <small class="text-danger">Required</small>
                 }
             </div>
-        </div>
+            <div class="col-md-3 form-group">
+                <label for="currentHireDate">Current CheckIn Time: {{editedRecord.checkInTime}}</label>
+            </div>
+        </div>-
         <br>
 
         <!--CheckOut Time-->
@@ -81,10 +84,13 @@
             <div class="col-md-3 form-group">
                 <label for="checkOutTime">CheckOut Time:</label>
                 <input type="time" class="form-control" id="checkOutTime" name="checkOutTime"
-                    [(ngModel)]="this.editedRecord.checkOutTime" #checkOutTime="ngModel" required>
+                    [(ngModel)]="this.selectedAttendanceRecord.checkOutTime" #checkOutTime="ngModel" required>
                 @if(checkOutTime.invalid && checkOutTime.touched){
                 <small class="text-danger">Required</small>
                 }
+            </div>
+            <div class="col-md-3 form-group">
+                <label for="currentHireDate">Current CheckIn Out: {{editedRecord.checkOutTime}}</label>
             </div>
         </div>
         <br>
@@ -94,7 +100,7 @@
             <div class="col-md-3 form-group">
                 <label for="status">Attendance Status:</label>
                 <select class="form-control custom-select" id="status" name="status"
-                    [(ngModel)]="this.editedRecord.status" #status="ngModel">
+                    [(ngModel)]="this.selectedAttendanceRecord.status" #status="ngModel">
                     <option [value]="-1" disabled>---Select a Status---</option>
                     @for(status of attendanceStatuses; track status; let index= $index){
                     <option [value]="attendanceStatusValue[index]">{{status}}</option>
@@ -119,5 +125,8 @@
         </div>
     </form>
 </div>
+
+}
+@else if(addMode){
 
 }
