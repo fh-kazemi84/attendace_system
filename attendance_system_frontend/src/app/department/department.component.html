@@ -1,0 +1,42 @@
+<br>
+<div class="row">
+    <div class="col-md-5 form-group">
+        <h5>Departments</h5>
+    </div>
+    <div class="col-md-3 form-group">
+        <div class="d-grid gap-2 d-md-flex justify-content">
+            <button class="btn btn-success">Add</button>
+            <button class="btn btn-outline-primary" (click)="onEmployeeList()">Back</button>
+        </div>
+    </div>
+</div>
+
+<div>
+    <br>
+    <ul>
+        <table class="table table-hover">
+            <thead>
+                <tr class="table table-success">
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col"> </th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (department of departmentList; track department; let index = $index) {
+                <tr>
+                    <th scope="row">{{index+1}}</th>
+                    <td>{{department.name}}</td>
+                    <td>{{department.description}}</td>
+                    <td class="d-grid gap-2 d-md-flex justify-content">
+                        <button class="btn btn-primary" (click)="onEditDepartment(department.id)">Edit</button>
+                        <button class="btn btn-danger" (click)="onDeleteDepartment(department.id)">Delete</button>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </ul>
+    <br>
+</div>
