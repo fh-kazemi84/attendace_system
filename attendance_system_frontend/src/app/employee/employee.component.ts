@@ -19,12 +19,14 @@ import { DepartmentService } from '../services/department.service';
 export class EmployeeComponent implements OnInit {
 
   employeeList: Employee[];
-  departments: Department[];
+  departmentList: Department[];
 
+  listMode: boolean = true;
   detailsMode: boolean = false;
   addMode: boolean = false;
 
   newEmployee: Employee;
+  selectedDepartment: Department;
 
   rePassword: string = '';
 
@@ -43,6 +45,7 @@ export class EmployeeComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.onLoadDepartments();
     this.OnLoadEmployees();
 
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(() => {
@@ -52,18 +55,21 @@ export class EmployeeComponent implements OnInit {
     });
 
     this.newEmployee = this.employeeService.defaultEmployee;
-
-    this.departmentService.getDepartments().subscribe((departments) => {
-      this.departments = departments;
-    });
   }
 
   OnLoadEmployees() {
     this.employeeService.getEmployees().subscribe((employee) => {
       this.employeeList = employee;
     });
+    this.listMode = true;
     this.detailsMode = false;
     this.addMode = false;
+  }
+
+  onLoadDepartments() {
+    this.departmentService.getDepartments().subscribe((departments) => {
+      this.departmentList = departments;
+    });
   }
 
   public OnEmployeeDetails(employeeId: number) {
@@ -71,11 +77,23 @@ export class EmployeeComponent implements OnInit {
     this.detailsMode = true;
   }
 
+  public onDepartment() {
+    this.router.navigate(['/admin/department']);
+  }
+
   switchToAddMode() {
     this.addMode = true;
+    this.listMode = false;
   }
 
   switchToListMode() {
+    this.listMode = true;
+    this.addMode = false;
+  }
+
+  switchToDepartmentMode() {
+    this.onDepartment();
+    this.listMode = false;
     this.addMode = false;
   }
 
