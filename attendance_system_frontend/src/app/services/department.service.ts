@@ -40,4 +40,12 @@ export class DepartmentService implements OnInit {
       department.id === id
     });
   }
+
+  public deleteDepartment(id: number): Observable<Department> {
+    return this.http.delete<Department>(`${this.apiUrl}/delete/${id}`, { responseType: 'text' as 'json' });
+  }
+
+  public updateDepartment(id: number, department: Department): Observable<Department> {
+    return this.http.put<Department>(`${this.apiUrl}/update?id=${id}`, department);
+  }
 }
