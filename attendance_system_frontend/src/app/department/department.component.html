@@ -1,3 +1,4 @@
+@if(!editDepartmentMode){
 <br>
 <div class="row">
     <div class="col-md-5 form-group">
@@ -40,3 +41,51 @@
     </ul>
     <br>
 </div>
+}
+@if (editDepartmentMode) {
+<br>
+<form #editModeForm="ngForm" (ngSubmit)="onEditSubmit(editModeForm)">
+    <h3>Edit Department</h3>
+    <br>
+
+    <!--Name-->
+    <div class="row">
+        <div class="col-md-3 form-group">
+            <label for="departmetName">Name:</label>
+        </div>
+        <div class="col-md-5 form-group">
+            <input type="text" class="form-control" id="departmetName" name="departmetName"
+                [(ngModel)]="selectedDepartment.name" #departmetName="ngModel" required>
+            @if(departmetName.invalid && departmetName.touched){
+            <small class="text-danger">Required</small>
+            }
+        </div>
+    </div>
+    <br>
+
+    <!--Description-->
+    <div class="row">
+        <div class="col-md-3 form-group">
+            <label for="departmetDescription">Description:</label>
+        </div>
+        <div class="col-md-5 form-group">
+            <textarea class="form-control" id="departmetDescription" name="departmetDescription"
+                [(ngModel)]="selectedDepartment.description" #departmetDescription="ngModel" rows="4" cols="50"
+                required></textarea>
+            @if(departmetDescription.invalid && departmetDescription.touched){
+            <small class="text-danger">Required</small>
+            }
+        </div>
+    </div>
+    <br>
+
+    <!-- Buttons -->
+    <div class="col-md-3 form-group">
+        <br>
+        <div class="d-grid gap-2 d-md-flex justify-content">
+            <button type="submit" class="btn btn-success">Update</button>
+            <button type="button" class="btn btn-warning" (click)="onCancelForm()">Cancel</button>
+        </div>
+    </div>
+</form>
+}
