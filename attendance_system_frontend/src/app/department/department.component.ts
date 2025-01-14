@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Department } from '../models/app-models';
-import { Router } from '@angular/router';
-import { DepartmentService } from '../services/department.service';
 import { FormsModule, NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
+
+import { Department } from '../models/app-models';
+import { DepartmentService } from '../services/department.service';
 
 @Component({
   selector: 'app-department',
