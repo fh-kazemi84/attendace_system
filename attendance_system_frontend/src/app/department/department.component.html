@@ -1,4 +1,4 @@
-@if(!editDepartmentMode){
+@if(!editMode && !addMode){
 <br>
 <div class="row">
     <div class="col-md-5 form-group">
@@ -6,12 +6,11 @@
     </div>
     <div class="col-md-3 form-group">
         <div class="d-grid gap-2 d-md-flex justify-content">
-            <button class="btn btn-success">Add</button>
+            <button class="btn btn-success" (click)="onAddMode()">Add</button>
             <button class="btn btn-outline-primary" (click)="onEmployeeList()">Back</button>
         </div>
     </div>
 </div>
-
 <div>
     <br>
     <ul>
@@ -31,7 +30,7 @@
                     <td>{{department.name}}</td>
                     <td>{{department.description}}</td>
                     <td class="d-grid gap-2 d-md-flex justify-content">
-                        <button class="btn btn-primary" (click)="onEditDepartment(department.id)">Edit</button>
+                        <button class="btn btn-primary" (click)="onEditMode(department.id)">Edit</button>
                         <button class="btn btn-danger" (click)="onDeleteDepartment(department.id)">Delete</button>
                     </td>
                 </tr>
@@ -42,7 +41,7 @@
     <br>
 </div>
 }
-@if (editDepartmentMode) {
+@if (editMode) {
 <br>
 <form #editModeForm="ngForm" (ngSubmit)="onEditSubmit(editModeForm)">
     <h3>Edit Department</h3>
@@ -84,6 +83,53 @@
         <br>
         <div class="d-grid gap-2 d-md-flex justify-content">
             <button type="submit" class="btn btn-success">Update</button>
+            <button type="button" class="btn btn-warning" (click)="onCancelForm()">Cancel</button>
+        </div>
+    </div>
+</form>
+}
+@if(addMode){
+<br>
+<form #addModeForm="ngForm" (ngSubmit)="onAddSubmit(addModeForm)">
+    <h3>Add New Department</h3>
+    <br>
+
+    <!--Name-->
+    <div class="row">
+        <div class="col-md-3 form-group">
+            <label for="departmetName">Name:</label>
+        </div>
+        <div class="col-md-5 form-group">
+            <input type="text" class="form-control" id="departmetName" name="departmetName"
+                [(ngModel)]="newDepartment.name" #departmetName="ngModel" required>
+            @if(departmetName.invalid && departmetName.touched){
+            <small class="text-danger">Required</small>
+            }
+        </div>
+    </div>
+    <br>
+
+    <!--Description-->
+    <div class="row">
+        <div class="col-md-3 form-group">
+            <label for="departmetDescription">Description:</label>
+        </div>
+        <div class="col-md-5 form-group">
+            <textarea class="form-control" id="departmetDescription" name="departmetDescription"
+                [(ngModel)]="newDepartment.description" #departmetDescription="ngModel" rows="4" cols="50"
+                required></textarea>
+            @if(departmetDescription.invalid && departmetDescription.touched){
+            <small class="text-danger">Required</small>
+            }
+        </div>
+    </div>
+    <br>
+
+    <!-- Buttons -->
+    <div class="col-md-3 form-group">
+        <br>
+        <div class="d-grid gap-2 d-md-flex justify-content">
+            <button type="submit" class="btn btn-success">Add</button>
             <button type="button" class="btn btn-warning" (click)="onCancelForm()">Cancel</button>
         </div>
     </div>

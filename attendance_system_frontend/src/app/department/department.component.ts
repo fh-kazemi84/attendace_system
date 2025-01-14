@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormsModule, NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
-
 import { Department } from '../models/app-models';
+import { Router } from '@angular/router';
 import { DepartmentService } from '../services/department.service';
+import { FormsModule, NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-department',
@@ -16,12 +15,13 @@ export class DepartmentComponent implements OnInit {
 
   departmentList: Department[];
   selectedDepartment: Department;
+  newDepartment: Department;
 
-  editDepartmentMode: boolean = false;
+  editMode: boolean = false;
+  addMode: boolean = false;
 
   constructor(private router: Router,
-    private departmentService: DepartmentService
-  ) { }
+    private departmentService: DepartmentService) { }
 
   ngOnInit(): void {
     this.onLoadDepartments();
@@ -42,13 +42,12 @@ export class DepartmentComponent implements OnInit {
     this.router.navigate(['/admin/employees']);
   }
 
-  onEditDepartment(departmentId) {
+  onEditMode(departmentId) {
     this.departmentService.getDepartmentById(departmentId).subscribe((department) => {
       this.selectedDepartment = department;
-      this.editDepartmentMode = true;
+      this.editMode = true;
     });
   }
-
 
   onEditSubmit(editModeForm: NgForm) {
     if (editModeForm.invalid) {
@@ -62,7 +61,7 @@ export class DepartmentComponent implements OnInit {
         next: (department) => {
           alert('Department updated successfully!');
           this.onLoadDepartments();
-          this.editDepartmentMode = false;
+          this.editMode = false;
         },
         error: (err) => {
           alert('Failed to update Department!');
@@ -73,7 +72,8 @@ export class DepartmentComponent implements OnInit {
 
   onCancelForm() {
     if (window.confirm('Are you sure you want to cancel?')) {
-      this.editDepartmentMode = false;
+      this.editMode = false;
+      this.addMode = false;
     }
   }
 
@@ -82,6 +82,32 @@ export class DepartmentComponent implements OnInit {
       this.departmentService.deleteDepartment(departmentId).subscribe({
         next: () => {
           this.onLoadDepartments();
+        }
+      });
+    }
+  }
+
+  onAddMode() {
+    this.newDepartment = {
+      id: 0,
+      name: '',
+      description: ''
+    };
+    this.addMode = true;
+  }
+
+  onAddSubmit(addModeForm: NgForm) {
+    if (addModeForm.invalid) {
+      alert('Please fill out all required fields.');
+    } else {
+      this.departmentService.addDepartment(this.newDepartment).subscribe({
+        next: (department) => {
+          alert('Department added successfully!');
+          this.onLoadDepartments();
+          this.addMode = false;
+        },
+        error: (err) => {
+          alert('Failed to add Department!');
         }
       });
     }
