@@ -3,15 +3,18 @@
     <br>
     <ul class="nav nav-tabs">
         <li class="nav-item">
-            <a class="nav-link" [class.active]="!addMode" (click)="switchToListMode()">Employee List</a>
+            <a class="nav-link" [class.active]="listMode" (click)="switchToListMode()">Employee List</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" [class.active]="addMode" (click)="switchToAddMode()">Add Employee</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" [class.active]="departmentMode" (click)="switchToDepartmentMode()">Department List</a>
+        </li>
     </ul>
 </div>
 
-@if(!addMode){
+@if(listMode){
 <div>
     <br>
     <ul>
@@ -46,7 +49,7 @@
     <br>
 </div>
 }
-@else {
+@if(addMode){
 <div>
     <br>
     <form #employeeForm="ngForm" (ngSubmit)="onSubmit(employeeForm)">
@@ -91,7 +94,7 @@
             <div class="col-md-3 form-group">
                 <label for="email">Email:</label>
                 <input type="email" class="form-control" id="email" name="email" [(ngModel)]="newEmployee.email"
-                    pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" #email="ngModel" required>
+                    pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$" #email="ngModel" required>
                 @if(email.invalid && email.touched){
                 @if(email.errors?.['required']){
                 <small class="text-danger">Required</small>
@@ -135,7 +138,7 @@
                 <select class="form-control custom-select" id="departmentId" name="departmentId"
                     [(ngModel)]="newEmployee.departmentId" #department="ngModel">
                     <option [value]="-1" disabled>---Select a Department---</option>
-                    @for(department of departments; track department; let index= $index){
+                    @for(department of departmentList; track department; let index= $index){
                     <option [value]="department.id">{{department.name}}</option>
                     }
                 </select>
