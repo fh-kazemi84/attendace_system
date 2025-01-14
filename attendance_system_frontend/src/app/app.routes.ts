@@ -6,6 +6,7 @@ import { EmployeeDetailsComponent } from './employee-details/employee-details.co
 import { AdminComponent } from './admin/admin.component';
 import { UsernameInfoComponent } from './username-info/username-info.component';
 import { AttendanceRecordsComponent } from './attendance-records/attendance-records.component';
+import { DepartmentComponent } from './department/department.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -20,6 +21,9 @@ export const routes: Routes = [
                     { path: 'attendance-records/:id', component: AttendanceRecordsComponent },
                 ]
             },
+            {
+                path: 'department', component: DepartmentComponent
+            }
         ]
     },
 ];
